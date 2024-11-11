@@ -1,0 +1,55 @@
+.lateral__nav{
+
+  
+    .ps-sidebar-root{
+        min-width: auto;
+        &.sidebar{
+            max-width: 108px;
+            position: relative;
+            bottom: 64px;
+            nav.ps-sidebar-container__custom{
+                
+                background-color: #33C173 !important;
+                
+                .manna_tech_logo{
+                    display: flex;
+                    margin: 0 auto;
+                    justify-content: center;
+                    padding-top: 1.5rem;
+                }
+
+                ul{
+                    
+                    .items-wrapper{
+                                margin-top: 4.5rem;
+                                display: flex;
+                                flex-direction: column;
+                                gap: .6rem;
+                        li.menu__item{
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                          
+                            a{
+                                &:hover{
+                                    background: rgba(37, 141, 84,0.3) 
+                                }
+                            }
+                            &:last-child{    
+                                margin-bottom: 120px;
+                            }
+                            &.active{
+                                a{
+                                    background: rgba(37, 141, 84,1) ;
+                                    transition: .9s ease;transform: scale(1.05) !important;
+                                   
+                                }
+                            }
+                           }
+                        }
+                      
+                }
+            }
+        }
+    }
+}

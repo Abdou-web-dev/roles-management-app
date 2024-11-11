@@ -1,0 +1,12 @@
+.app-component{
+    .sidebar__with-content{        
+
+        .sidebar{
+            flex: 5%;
+            
+        }
+        .tab__content{
+            flex: 95%;
+        }
+    }
+}

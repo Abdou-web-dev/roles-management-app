@@ -1,0 +1,23 @@
+.topbar-component{
+    margin-left: 108px;
+    background: #ECECEE;
+
+    .topbar-component__inner{
+        align-items: center;
+        justify-content: flex-end;
+        margin-right: 2rem;
+        height: 64px;
+        span.text{
+            color: #2B2F32;
+            font-family: Inter;
+            font-size: 14px;
+            font-weight: 400;
+            // line-height: 16px;
+            text-align: right;
+            text-underline-position: from-font;
+            text-decoration-skip-ink: none;
+            margin-right: 20px;
+            
+        }
+    }
+}
