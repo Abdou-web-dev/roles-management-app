@@ -8,6 +8,7 @@
             position: relative;
             bottom: 64px;
             nav.ps-sidebar-container__custom{
+                height: 100vh;
                 
                 background-color: #33C173 !important;
                 
@@ -36,7 +37,7 @@
                                 }
                             }
                             &:last-child{    
-                                margin-bottom: 120px;
+                                // margin-bottom: 120px;
                             }
                             &.active{
                                 a{

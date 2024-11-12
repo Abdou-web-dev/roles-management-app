@@ -1,0 +1,115 @@
+.role__card-container{
+    border: 1px solid #33C173;
+    border-radius: 10px;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    // flex-direction: column;
+
+    .role__header__icons{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        h3.role-header{
+            font-family: Inter;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 18px;
+            letter-spacing: -0.0008em;
+            text-align: left;
+            text-underline-position: from-font;
+            text-decoration-skip-ink: none;
+            color:  #808285;
+            align-self: flex-start;   
+            margin-left: 12px; 
+            margin-top: 20px;   
+        }
+
+        .control__icons{
+            align-self: flex-end;
+            margin-right: 1rem;   
+            button.edit-icon{
+                margin-right: .5rem;  
+                &:hover{
+                    transform: scale(1.2);
+                    transition: .2s ease;
+                }
+            }
+        }
+
+    }
+   
+    .role-category{
+        .role__icon{
+            // margin-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+
+        }
+        .admin__text{
+            color: #2B2F32;
+            font-family: Inter;
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 22px;
+            letter-spacing: -0.0041em;
+            text-align: center;
+            text-underline-position: from-font;
+            text-decoration-skip-ink: none;    
+        }
+        .users_wrapper{
+            // margin-top: 1rem ;
+            margin-top: 2rem ;
+
+           .users_wrapper-inner{
+            margin-bottom: .85rem ;
+                img{
+                    margin-right: 5px;
+                   
+                }
+                .users_assigned{
+                    font-family: Inter;
+                    font-size: 18px;
+                    font-weight: 700;
+                    line-height: 18px;
+                    letter-spacing: -0.0008em;
+                    text-align: left;
+                    text-underline-position: from-font;
+                    text-decoration-skip-ink: none;
+                    color: #808285;
+                }
+           }
+
+           p{
+            color: #808285;
+            font-family: Inter;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 18px;
+            letter-spacing: -0.0008em;
+            text-align: left;
+            text-underline-position: from-font;
+            text-decoration-skip-ink: none;
+            // margin-bottom: 1rem;  
+            margin-bottom: 3rem;
+
+           }
+        }
+        button.use__as{
+            margin-bottom: 3rem;
+            // margin-bottom: 1rem;
+
+            span{
+            color: #33C173;
+            font-family: Inter;
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 24.2px;
+            text-align: center;
+            text-decoration-line: underline;
+            text-decoration-style: solid;
+            text-underline-position: from-font;
+            text-decoration-skip-ink: none;
+            }
+        }
+    }
+}

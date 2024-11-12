@@ -1,4 +1,4 @@
-import "./spinner_mobile.scss";
+import "./spinner.scss";
 
 export function NiceSpinner() {
   return (
