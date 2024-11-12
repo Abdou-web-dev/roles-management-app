@@ -1,5 +1,5 @@
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import dashboard from "../../assets/dashboard.svg";
 import locks from "../../assets/locks.svg";
 import settings from "../../assets/settings.svg";
@@ -11,7 +11,7 @@ import facilities from "../../assets/facilities.svg";
 import manna_tech from "../../assets/manna_tech.svg";
 
 import "./nav_styles.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const LateralNavBar = () => {
   const tabs = [

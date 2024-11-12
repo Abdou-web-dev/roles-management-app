@@ -12,3 +12,16 @@ export interface Role {
   permissions: Permission[];
   usersAssigned: number;
 }
+
+export interface postRoleDataPayload {
+  name: string;
+  roleIcon: number;
+  permissions: Permission[];
+}
+
+export interface updateRoleDataPayload {
+  id: string;
+  name: string;
+  roleIcon: number;
+  permissions: Permission[];
+}
