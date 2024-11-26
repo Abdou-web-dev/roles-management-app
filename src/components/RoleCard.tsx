@@ -13,7 +13,6 @@ interface RoleCardProps {
 
 export const RoleCard: FunctionComponent<RoleCardProps> = ({ role }) => {
   //   const [roleIcon, setRoleIcon] = useState("");
-  // role?.name === "Admin" || role?.name === "Personel"
   //   const setRoleIconByName = () => {
   //     switch (role.name) {
   //       case "Admin":
@@ -48,22 +47,24 @@ export const RoleCard: FunctionComponent<RoleCardProps> = ({ role }) => {
             {role?.name === "Admin" || role?.name === "Personel" ? `Default Role` : `Custom Role`}
           </h3>
 
-          <div className="control__icons flex">
-            <button className="edit-icon transform transition-transform duration-300 hover:scale-110">
-              <img
-                src={editIcon}
-                alt="Edit"
-                width="20px"
-              />
-            </button>
-            <button className="delete-icon transform transition-transform duration-300 hover:scale-110 ">
-              <img
-                src={deleteIcon}
-                alt="Delete"
-                width="20px"
-              />
-            </button>
-          </div>
+          {role?.name === "Admin" || role?.name === "Personel" ? null : (
+            <div className="control__icons flex">
+              <button className="edit-icon transform transition-transform duration-300 hover:scale-110">
+                <img
+                  src={editIcon}
+                  alt="Edit"
+                  width="20px"
+                />
+              </button>
+              <button className="delete-icon transform transition-transform duration-300 hover:scale-110 ">
+                <img
+                  src={deleteIcon}
+                  alt="Delete"
+                  width="20px"
+                />
+              </button>
+            </div>
+          )}
         </div>
         <div className="role-category flex flex-col justify-center items-center">
           <img

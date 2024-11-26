@@ -1,10 +1,7 @@
-.role__card-container{
+li.role__card-container{
     border: 1px solid #33C173;
     border-radius: 10px;
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
-    // flex-direction: column;
+    // height: 100%;
 
     .role__header__icons{
         display: flex;
@@ -41,7 +38,7 @@
    
     .role-category{
         .role__icon{
-            // margin-bottom: 0.5rem;
+            // width: 40px;
             margin-bottom: 1.5rem;
 
         }
@@ -57,7 +54,6 @@
             text-decoration-skip-ink: none;    
         }
         .users_wrapper{
-            // margin-top: 1rem ;
             margin-top: 2rem ;
 
            .users_wrapper-inner{
@@ -89,14 +85,12 @@
             text-align: left;
             text-underline-position: from-font;
             text-decoration-skip-ink: none;
-            // margin-bottom: 1rem;  
             margin-bottom: 3rem;
 
            }
         }
         button.use__as{
             margin-bottom: 3rem;
-            // margin-bottom: 1rem;
 
             span{
             color: #33C173;

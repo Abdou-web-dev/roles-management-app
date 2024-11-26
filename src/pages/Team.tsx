@@ -6,11 +6,13 @@ import { CUSTOM_IDENTIFIER } from "../constants/const";
 import { RoleCard } from "../components/RoleCard";
 import "./pages__styles.scss";
 import plus__icon from "../assets/plus__icon.svg";
+import RoleForm from "../components/RoleForm";
 
 const Team = () => {
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isCreatingRole, setIsCreatingRole] = useState(false);
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -32,6 +34,9 @@ const Team = () => {
     fetchRoles();
   }, []);
 
+  const handleAddRoleClick = () => setIsCreatingRole(true);
+  const handleBackClick = () => setIsCreatingRole(false);
+
   if (loading)
     return (
       <div className="flex justify-center items-center mt-32">
@@ -43,29 +48,44 @@ const Team = () => {
 
   return (
     <div className="team__page">
-      <h1 className="h1">User Roles</h1>
+      {!isCreatingRole && <h1 className="h1">User Roles</h1>}
       <div className="roles-tile-list-wrapper">
-        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {roles.map((role, index) => (
-            <React.Fragment key={role.id}>
-              <RoleCard role={role} />
-              {/* The conditional {index === roles.length - 1 && ...} ensures the button is displayed only after the last role. */}
-              {index === roles.length - 1 && (
-                <button
-                  className="add__custom_role_button col-span-1 sm:col-span-1 md:col-span-1 lg:col-span-1 justify-self-start border rounded-lg p-4 
-              h-full w-full shadow-sm hover:shadow-md "
-                >
-                  <img
-                    src={plus__icon}
-                    alt=""
-                    className="mr-2"
-                  />
-                  <span> Add Custom Role</span>
-                </button>
-              )}
-            </React.Fragment>
-          ))}
-        </ul>
+        {!isCreatingRole ? (
+          <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {roles?.map((role: Role, index: number) => (
+              // The conditional index === roles.length - 1 && ... ensures the button is displayed only after the last role.
+              <React.Fragment key={role.id}>
+                <RoleCard role={role} />
+                {index === roles.length - 1 && (
+                  <button
+                    onClick={handleAddRoleClick}
+                    className="add__custom_role_button col-span-1 sm:col-span-1 md:col-span-1 lg:col-span-1 justify-self-start border rounded-lg p-4 
+                             h-full w-full shadow-sm hover:shadow-md "
+                  >
+                    <img
+                      src={plus__icon}
+                      alt=""
+                      className="mr-2 mb-6"
+                    />
+                    <span> Add Custom Role</span>
+                  </button>
+                )}
+              </React.Fragment>
+            ))}
+          </ul>
+        ) : (
+          <div className="create-custom-role p-4">
+            <button
+              className="back-button text-blue-500 underline mb-4"
+              onClick={handleBackClick}
+            >
+              ← Back
+            </button>
+            <h2 className="text-xl font-bold mb-4">Create Custom Role</h2>
+            <h3>Configure general information and permissions below. Don’t forget to save the Custom Role.</h3>
+            <RoleForm />
+          </div>
+        )}
       </div>
     </div>
   );

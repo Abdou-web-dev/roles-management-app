@@ -1,6 +1,4 @@
 .lateral__nav{
-
-  
     .ps-sidebar-root{
         min-width: auto;
         &.sidebar{
@@ -9,9 +7,7 @@
             bottom: 64px;
             nav.ps-sidebar-container__custom{
                 height: 100vh;
-                
                 background-color: #33C173 !important;
-                
                 .manna_tech_logo{
                     display: flex;
                     margin: 0 auto;
@@ -50,6 +46,11 @@
                         }
                       
                 }
+                // @media only screen and (max-width: 1500px) {}
+                @media only screen and (max-width: 1300px) {
+                   height: auto;
+                  }
+                  
             }
         }
     }

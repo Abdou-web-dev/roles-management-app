@@ -1,7 +1,6 @@
 .team__page{
-    // border: 1px solid;
     padding: 2rem ;
-    padding-top: 1rem;
+    padding-top: 1.5rem;
     h1.h1{
         font-family: Inter;
         font-size: 24px;
@@ -11,11 +10,27 @@
         text-underline-position: from-font;
         text-decoration-skip-ink: none;
         color: #2B2F32;
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
     }
     .roles-tile-list-wrapper{
         overflow-y: scroll;
         max-height: 600px;
+
+        &::-webkit-scrollbar {
+            width: 10px;
+          }
+          &::-webkit-scrollbar-track {
+            border-radius: 10px;
+            background: rgba(161, 160, 160, 0.05);
+          }
+          &::-webkit-scrollbar-thumb {
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            &:hover {
+              border-radius: 10px;
+              background: rgba(23, 22, 22, 0.44);
+            }
+          }
 
         .add__custom_role_button{
             background: #F2F4F5;
@@ -23,7 +38,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 370.8px;
+            height: 330px;
 
             span{
                 font-family: Inter;
