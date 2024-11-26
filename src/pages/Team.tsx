@@ -53,10 +53,10 @@ const Team = () => {
         {!isCreatingRole ? (
           <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {roles?.map((role: Role, index: number) => (
-              // The conditional index === roles.length - 1 && ... ensures the button is displayed only after the last role.
               <React.Fragment key={role.id}>
                 <RoleCard role={role} />
                 {index === roles.length - 1 && (
+                  // The conditional index === roles.length - 1 && ... ensures the button is displayed only after the last role.
                   <button
                     onClick={handleAddRoleClick}
                     className="add__custom_role_button col-span-1 sm:col-span-1 md:col-span-1 lg:col-span-1 justify-self-start border rounded-lg p-4 

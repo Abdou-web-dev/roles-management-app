@@ -13,7 +13,7 @@ import { TopBar } from "./pages/navigation/TopBar";
 import { LateralNavBar } from "./pages/navigation/LateralNavBar";
 
 const routeConfig = [
-  { path: "/", element: <Dashboard /> },
+  // { path: "/", element: <Dashboard /> },
   { path: "/dashboard", element: <Dashboard /> },
   { path: "/locks", element: <Locks /> },
   { path: "/settings", element: <Settings /> },
