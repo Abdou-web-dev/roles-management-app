@@ -1,22 +1,31 @@
 import { FunctionComponent, useState } from "react";
+import { AccessLevel, Permission, PermissionType } from "../interfaces/RoleInterface";
 
 interface PermissionSelectorProps {
-  permissionName: string; // Name of the permission (e.g., "Locks")
-  initialPermission: string; // Initial value for the permission (e.g., "None")
-  onPermissionChange: (permission: string) => void; // Callback to update permission state
+  initialPermission: string | AccessLevel | undefined; // Initial value for the permission (e.g., "None")
+  onPermissionChange: (newPermission: any) => void;
+  permissionType: PermissionType | string;
 }
 
 const PermissionSelector: FunctionComponent<PermissionSelectorProps> = ({
-  permissionName,
   initialPermission,
   onPermissionChange,
+  permissionType,
 }) => {
   // Local state for tracking selected permission
-  const [selectedPermission, setSelectedPermission] = useState(initialPermission);
+  const [selectedPermission, setSelectedPermission] = useState<string | AccessLevel | undefined>(initialPermission);
 
-  const handleClick = (permission: string) => {
-    setSelectedPermission(permission);
-    onPermissionChange(permission); // Notify parent component (Formik form) of the change
+  const handleClick = (accessLevelValue: AccessLevel | string) => {
+    const permissionObj: Permission = {
+      id: permissionType as PermissionType | string, // Use the enum value as the unique id
+      accessLevel: accessLevelValue, // "None", "Read", or "Write"
+    };
+
+    // Pass the updated permission to the parent handler
+    onPermissionChange(permissionObj);
+
+    // Update local state
+    setSelectedPermission(accessLevelValue);
   };
 
   const getColor = (permission: string) => {
@@ -25,8 +34,6 @@ const PermissionSelector: FunctionComponent<PermissionSelectorProps> = ({
 
   return (
     <div className="flex flex-col justify-between items-center space-x-4">
-      <label className="">{permissionName}</label>
-
       <div className="flex gap-0">
         <div
           onClick={() => handleClick("None")}

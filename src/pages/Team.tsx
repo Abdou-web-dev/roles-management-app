@@ -51,7 +51,7 @@ const Team = () => {
       {!isCreatingRole && <h1 className="h1">User Roles</h1>}
       <div className="roles-tile-list-wrapper">
         {!isCreatingRole ? (
-          <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <ul className="roles-grid-ul grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {roles?.map((role: Role, index: number) => (
               <React.Fragment key={role.id}>
                 <RoleCard role={role} />

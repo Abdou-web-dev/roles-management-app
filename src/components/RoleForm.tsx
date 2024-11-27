@@ -1,30 +1,41 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import RoleIcons from "./RoleIcons";
 import { addRole } from "../services/api";
-import { CUSTOM_IDENTIFIER } from "../constants/const";
+import { accessLevelMapping, CUSTOM_IDENTIFIER, permissionsArray } from "../constants/const";
 import PermissionSelector from "./PermissionSelector";
+import { Permission } from "../interfaces/RoleInterface";
 
 const RoleForm: FunctionComponent = () => {
   const formik = useFormik({
     initialValues: {
       roleName: "",
-      roleIcon: 0, // Default to the first icon
-      locksPermission: "None",
+      roleIcon: 0,
+      permissions: permissionsArray.map(({ name }) => ({
+        id: name, // Permission name as the id (or use an enum if available)
+        accessLevel: "None", // Default access level
+      })),
     },
+
     validationSchema: Yup.object({
       roleName: Yup.string().required("Role name is required"),
     }),
+
     onSubmit: async (values, { setSubmitting, resetForm }) => {
+      const permissions = values.permissions.map((permission) => ({
+        id: permission.id,
+        accessLevel: accessLevelMapping[permission.accessLevel as "None" | "View" | "Edit"], // Type assertion here
+      }));
+
       try {
         const payload = {
           name: values.roleName,
           roleIcon: values.roleIcon,
-          permissions: [], // Empty array as per requirements
+          permissions: permissions,
         };
-        await addRole(CUSTOM_IDENTIFIER, payload); // Replace "custom_identifier" with your logic
-        alert("Role added successfully!");
+        await addRole(CUSTOM_IDENTIFIER, payload);
+        console.log("Payload sent is:", payload);
         resetForm();
       } catch (error) {
         console.error("Error adding role:", error);
@@ -34,6 +45,15 @@ const RoleForm: FunctionComponent = () => {
       }
     },
   });
+
+  const onPermissionChange = (updatedPermission: Permission) => {
+    // Update the permission in Formik's state using setFieldValue
+    const permissionIndex = formik.values.permissions.findIndex((permission) => permission.id === updatedPermission.id);
+    if (permissionIndex >= 0) {
+      formik.setFieldValue(`permissions[${permissionIndex}].accessLevel`, updatedPermission.accessLevel);
+    }
+    console.log(updatedPermission, "updatedPermission");
+  };
 
   return (
     <form
@@ -57,9 +77,9 @@ const RoleForm: FunctionComponent = () => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         />
-        {formik.touched.roleName && formik.errors.roleName ? (
+        {formik.touched.roleName && formik.errors.roleName && (
           <div className="text-red-500 text-sm">{formik.errors.roleName}</div>
-        ) : null}
+        )}
       </div>
 
       <div>
@@ -75,22 +95,17 @@ const RoleForm: FunctionComponent = () => {
         />
       </div>
 
-      {/* Permissions Section */}
-      <div>
-        <PermissionSelector
-          permissionName="Locks"
-          initialPermission={formik.values.locksPermission}
-          onPermissionChange={(permission: string) => formik.setFieldValue("locksPermission", permission)} // Update Formik state
-        />
-      </div>
+      {permissionsArray.map(({ name, label }) => (
+        <div key={name}>
+          <label className="block text-sm font-medium text-gray-700">{label}</label>
+          <PermissionSelector
+            onPermissionChange={onPermissionChange}
+            initialPermission={formik.values.permissions.find((permission) => permission.id === name)?.accessLevel}
+            permissionType={name}
+          />
+        </div>
+      ))}
 
-      <div>
-        <PermissionSelector
-          permissionName="Tenant Locks"
-          initialPermission={formik.values.locksPermission}
-          onPermissionChange={(permission: string) => formik.setFieldValue("locksPermission", permission)} // Update Formik state
-        />
-      </div>
       <div>
         <button
           type="button"
