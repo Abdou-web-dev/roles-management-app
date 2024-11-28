@@ -33,6 +33,7 @@
           }
 
           .roles-grid-ul{
+            grid-auto-rows: 1fr; /* Ensure all rows have equal height */
             margin-right: 20px;
 
         .add__custom_role_button{
@@ -61,3 +62,5 @@
       }
     }
 }
+
+
