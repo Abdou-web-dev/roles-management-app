@@ -34,6 +34,10 @@ const Team = () => {
     fetchRoles();
   }, []);
 
+  useEffect(() => {
+    console.log(roles, "list of roles is : ");
+  }, [roles]);
+
   const handleAddRoleClick = () => setIsCreatingRole(true);
   const handleBackClick = () => setIsCreatingRole(false);
 

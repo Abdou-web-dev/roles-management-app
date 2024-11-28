@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import RoleIcons from "./RoleIcons";
@@ -6,6 +6,7 @@ import { addRole } from "../services/api";
 import { accessLevelMapping, CUSTOM_IDENTIFIER, permissionsArray } from "../constants/const";
 import PermissionSelector from "./PermissionSelector";
 import { Permission } from "../interfaces/RoleInterface";
+import { PermissionToggle } from "./PermissionToggle";
 
 const RoleForm: FunctionComponent = () => {
   const formik = useFormik({
@@ -13,8 +14,8 @@ const RoleForm: FunctionComponent = () => {
       roleName: "",
       roleIcon: 0,
       permissions: permissionsArray.map(({ name }) => ({
-        id: name, // Permission name as the id (or use an enum if available)
-        accessLevel: "None", // Default access level
+        id: name, // Permission name as the id (or use an enum if available) // accessLevel: "None", // Default access level
+        accessLevel: name === "TransferFacilities" || name === "EditAdmins" ? 0 : "None", // Set to 'No' for binary permissions initially
       })),
     },
 
@@ -25,17 +26,28 @@ const RoleForm: FunctionComponent = () => {
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       const permissions = values.permissions.map((permission) => ({
         id: permission.id,
-        accessLevel: accessLevelMapping[permission.accessLevel as "None" | "View" | "Edit"], // Type assertion here
+        // accessLevel: accessLevelMapping[permission.accessLevel as "None" | "View" | "Edit"], // Type assertion here, convert access level to number
+        accessLevel:
+          permission.id === "TransferFacilities" || permission.id === "EditAdmins"
+            ? permission.accessLevel === 0
+              ? 0
+              : permission.accessLevel === 1
+              ? 1
+              : accessLevelMapping["None"]
+            : accessLevelMapping[permission.accessLevel as "None" | "View" | "Edit"],
       }));
 
       try {
-        const payload = {
+        const permissionsPayload = {
           name: values.roleName,
           roleIcon: values.roleIcon,
           permissions: permissions,
         };
-        await addRole(CUSTOM_IDENTIFIER, payload);
-        console.log("Payload sent is:", payload);
+
+        // console.log(permissionsPayload, "permissionsPayload just before submitting the form");
+        await addRole(CUSTOM_IDENTIFIER, permissionsPayload);
+        // console.log("Payload to be sent:", JSON.stringify(permissionsPayload, null, 2));
+
         resetForm();
       } catch (error) {
         console.error("Error adding role:", error);
@@ -52,7 +64,6 @@ const RoleForm: FunctionComponent = () => {
     if (permissionIndex >= 0) {
       formik.setFieldValue(`permissions[${permissionIndex}].accessLevel`, updatedPermission.accessLevel);
     }
-    console.log(updatedPermission, "updatedPermission");
   };
 
   return (
@@ -95,16 +106,41 @@ const RoleForm: FunctionComponent = () => {
         />
       </div>
 
-      {permissionsArray.map(({ name, label }) => (
-        <div key={name}>
-          <label className="block text-sm font-medium text-gray-700">{label}</label>
-          <PermissionSelector
-            onPermissionChange={onPermissionChange}
-            initialPermission={formik.values.permissions.find((permission) => permission.id === name)?.accessLevel}
-            permissionType={name}
-          />
-        </div>
-      ))}
+      <>
+        {/* AAAAAAAAAA */}
+        {permissionsArray?.map(({ name, label }) => {
+          const isBinaryPermission = name === "EditAdmins" || name === "TransferFacilities";
+          const permission = formik.values.permissions.find((perm: Permission) => perm.id === name);
+          if (!permission) return null;
+
+          return (
+            <div key={name}>
+              <label className="block text-sm font-medium text-gray-700">{label}</label>
+              {isBinaryPermission ? (
+                <PermissionToggle
+                  permission={permission.id}
+                  accessLevel={permission.accessLevel}
+                  onChange={onPermissionChange} // This passes the `onPermissionChange` function defined in the parent
+                  initialPermission={
+                    formik.values.permissions.find((permission) => permission.id === name)?.accessLevel
+                  }
+                />
+              ) : (
+                <>
+                  {/* <label className="block text-sm font-medium text-gray-700">{label}</label> */}
+                  <PermissionSelector
+                    onPermissionChange={onPermissionChange}
+                    initialPermission={
+                      formik.values.permissions.find((permission) => permission.id === name)?.accessLevel
+                    }
+                    permissionType={name}
+                  />
+                </>
+              )}
+            </div>
+          );
+        })}
+      </>
 
       <div>
         <button
