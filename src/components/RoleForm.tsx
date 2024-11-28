@@ -26,7 +26,6 @@ const RoleForm: FunctionComponent = () => {
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       const permissions = values.permissions.map((permission) => ({
         id: permission.id,
-        // accessLevel: accessLevelMapping[permission.accessLevel as "None" | "View" | "Edit"], // Type assertion here, convert access level to number
         accessLevel:
           permission.id === "TransferFacilities" || permission.id === "EditAdmins"
             ? permission.accessLevel === 0
@@ -34,7 +33,7 @@ const RoleForm: FunctionComponent = () => {
               : permission.accessLevel === 1
               ? 1
               : accessLevelMapping["None"]
-            : accessLevelMapping[permission.accessLevel as "None" | "View" | "Edit"],
+            : accessLevelMapping[permission.accessLevel as "None" | "View" | "Edit"], // Type assertion here, convert access level to number
       }));
 
       try {
@@ -69,34 +68,29 @@ const RoleForm: FunctionComponent = () => {
   return (
     <form
       onSubmit={formik.handleSubmit}
-      className="space-y-4"
+      className="space-y-4 role-form-container"
     >
-      <div>
-        <label
-          htmlFor="roleName"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Custom Role Name
-        </label>
+      <div className="custom-role-name">
+        <label htmlFor="roleName">Custom Role Name</label>
         <input
           type="text"
           id="roleName"
           name="roleName"
           placeholder="Input Custom Role Name"
-          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+          className="mt-1 block w-full rounded-md"
           value={formik.values.roleName}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         />
         {formik.touched.roleName && formik.errors.roleName && (
-          <div className="text-red-500 text-sm">{formik.errors.roleName}</div>
+          <div className="role__name_error">{formik.errors.roleName}</div>
         )}
       </div>
 
-      <div>
+      <div className="role-icons-container">
         <label
           htmlFor="roleIcon"
-          className="block text-sm font-medium text-gray-700"
+          className=""
         >
           Select Role Icon
         </label>
@@ -106,16 +100,19 @@ const RoleForm: FunctionComponent = () => {
         />
       </div>
 
-      <>
-        {/* AAAAAAAAAA */}
+      <h2>Permissions</h2>
+      <div className="permissions-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 gap-x-0">
         {permissionsArray?.map(({ name, label }) => {
           const isBinaryPermission = name === "EditAdmins" || name === "TransferFacilities";
           const permission = formik.values.permissions.find((perm: Permission) => perm.id === name);
           if (!permission) return null;
 
           return (
-            <div key={name}>
-              <label className="block text-sm font-medium text-gray-700">{label}</label>
+            <div
+              className="permissions-inner"
+              key={name}
+            >
+              <label className="perm__label">{label}</label>
               {isBinaryPermission ? (
                 <PermissionToggle
                   permission={permission.id}
@@ -127,7 +124,6 @@ const RoleForm: FunctionComponent = () => {
                 />
               ) : (
                 <>
-                  {/* <label className="block text-sm font-medium text-gray-700">{label}</label> */}
                   <PermissionSelector
                     onPermissionChange={onPermissionChange}
                     initialPermission={
@@ -140,24 +136,22 @@ const RoleForm: FunctionComponent = () => {
             </div>
           );
         })}
-      </>
+      </div>
 
-      <div>
+      <div className="role-control-buttons">
         <button
           type="button"
-          className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+          className="cancel__btn"
           onClick={() => formik.resetForm()}
         >
-          Cancel
+          <span>Cancel</span>
         </button>
         <button
           type="submit"
-          className={`ml-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 ${
-            formik.isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-          }`}
+          className={`save__btn ${formik.isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
           disabled={formik.isSubmitting}
         >
-          Save Changes
+          <span>Save Changes</span>
         </button>
       </div>
     </form>

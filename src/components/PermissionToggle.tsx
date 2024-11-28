@@ -1,5 +1,5 @@
 import { FunctionComponent, useState } from "react";
-import { AccessLevel, Permission, PermissionType } from "../interfaces/RoleInterface";
+import { AccessLevel, Permission } from "../interfaces/RoleInterface";
 
 interface PermissionToggleProps {
   permission: string;
@@ -28,26 +28,23 @@ export const PermissionToggle: FunctionComponent<PermissionToggleProps> = ({
   };
 
   return (
-    <div className="flex space-x-4 mt-2">
-      <button
-        onClick={() => handleClick(1)} // For "Yes"
-        disabled={accessLevel === 1} // Disable if already set to "Yes"
-        type="button"
-        className={`px-4 py-2 rounded-md font-medium ${
-          accessLevel === 1 ? "bg-green-500 text-white" : "bg-gray-200 text-gray-700"
-        }`}
-      >
-        Yes
-      </button>
+    <div className="permission__toggle">
       <button
         onClick={() => handleClick(0)} // For "No"
         disabled={accessLevel === 0} // Disable if already set to "No"
         type="button"
-        className={`px-4 py-2 rounded-md font-medium ${
-          accessLevel === 0 ? "bg-red-500 text-white" : "bg-gray-200 text-gray-700"
-        }`}
+        className={`no__btn ${accessLevel === 0 ? "no__active-button-class" : "no__inactive-button-class"}`}
       >
-        No
+        <span>No</span>
+      </button>
+
+      <button
+        onClick={() => handleClick(1)} // For "Yes"
+        disabled={accessLevel === 1} // Disable if already set to "Yes"
+        type="button"
+        className={`yes__btn ${accessLevel === 1 ? "yes__active-button-class" : "yes__inactive-button-class"}`}
+      >
+        <span>Yes</span>
       </button>
     </div>
   );

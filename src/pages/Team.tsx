@@ -7,6 +7,7 @@ import { RoleCard } from "../components/RoleCard";
 import "./pages__styles.scss";
 import plus__icon from "../assets/plus__icon.svg";
 import RoleForm from "../components/RoleForm";
+import back from "../assets/back.svg";
 
 const Team = () => {
   const [roles, setRoles] = useState<Role[]>([]);
@@ -78,14 +79,20 @@ const Team = () => {
             ))}
           </ul>
         ) : (
-          <div className="create-custom-role p-4">
-            <button
-              className="back-button text-blue-500 underline mb-4"
-              onClick={handleBackClick}
-            >
-              ← Back
-            </button>
-            <h2 className="text-xl font-bold mb-4">Create Custom Role</h2>
+          <div className="create-custom-role-page pr-2">
+            <div className="btn_and_title">
+              <h2 className="font-bold mb-4">Create Custom Role</h2>
+              <button
+                className="back__button"
+                onClick={handleBackClick}
+              >
+                <img
+                  src={back}
+                  alt=""
+                />
+                <span>Back</span>
+              </button>
+            </div>
             <h3>Configure general information and permissions below. Don’t forget to save the Custom Role.</h3>
             <RoleForm />
           </div>

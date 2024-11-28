@@ -16,7 +16,7 @@ const RoleIcons: FunctionComponent<RoleIconsProps> = ({ selectedIcon, setSelecte
   ];
 
   return (
-    <div className="flex gap-6">
+    <div className="role-icons-inner flex gap-0">
       {icons?.map((icon) => {
         const fillColor = selectedIcon === icon.id ? "#33C173" : "#ABAFB1"; // Green if selected, grey if not
 
@@ -24,7 +24,7 @@ const RoleIcons: FunctionComponent<RoleIconsProps> = ({ selectedIcon, setSelecte
           <div
             key={icon.id}
             onClick={() => setSelectedIcon(icon.id)}
-            className={`cursor-pointer p-2  rounded-md ${
+            className={`single__icon cursor-pointer p-2  ${
               selectedIcon === icon.id ? "border-[#33C173]" : "border-[#ABAFB1]"
             }`}
           >

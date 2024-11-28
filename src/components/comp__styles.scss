@@ -1,3 +1,24 @@
+
+@mixin label__styles {
+        font-family: Inter;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 14.52px;
+        text-align: left;
+        text-underline-position: from-font;
+        text-decoration-skip-ink: none;
+        color: #5E6366;
+}
+
+@mixin btn_span_styles{
+    // color: #FFFFFF;
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19.36px;
+    text-align: center;
+}
+
 li.role__card-container{
     border: 1px solid #33C173;
     border-radius: 10px;
@@ -107,3 +128,221 @@ li.role__card-container{
         }
     }
 }
+
+.role-form-container{
+
+    .custom-role-name{
+        label{
+            @include label__styles();
+        }
+        input{
+            width: 375px;
+            top: 185px;
+            left: 132px;
+            height: 52px;
+            gap: 0px;
+            opacity: 0px;
+            margin-left: 2px;
+            padding-left: 20px;
+            letter-spacing: .1rem;
+            border: 1px solid rgba(207, 211, 212, 0.5);
+
+            &::placeholder{
+                color: #ABAFB1;
+                font-family: 'Inter';
+                font-size: 16px;
+                font-weight: 400;
+                line-height: 19.36px;
+                text-align: left;
+                padding-left: 20px;
+                letter-spacing: 0;
+            }
+            &:focus{
+                outline: 0;
+                border: 1px solid rgba(207, 211, 212, 1) !important;
+            }
+            &:hover{
+                border: 1px solid rgba(207, 211, 212, 0.5);
+                box-shadow: rgba(0, 0, 0, 0.02) 0px 0px 0px 1px;    
+            }
+        }
+        .role__name_error{
+            font-family: 'Inter';
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 16.94px;
+             color: #F57E77;
+             margin-top: 10px;
+             margin-left: 2px;
+        }
+    }
+    .role-icons-container{
+        margin-left: 2px;
+        margin-top: 2.5rem !important;
+        
+        label{
+            @include label__styles();
+
+        }
+        .role-icons-inner{
+            .single__icon{
+                position: relative;
+                right: 8px;
+            }
+        }
+    }
+    h2{
+        color: #2B2F32;
+        font-family: Inter;
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 22px;
+        margin-bottom: 1.5rem;
+        margin-left: 2px;
+        margin-top: 3rem !important;
+
+    }
+
+    .permissions-container{
+        margin-left: 2px;
+        max-width: 96%;
+        .permissions-inner{
+                display: flex;
+                flex-direction: column;
+                gap: .6rem;
+                label.perm__label{
+                @include label__styles();
+            } 
+            .permission-selector-container{
+                .none__button,.view__button,.edit__button{
+                    width: 133.33px;
+                    height: 39px;
+                    span{
+                      @include btn_span_styles();
+                    }
+                   
+                }
+                .none__button{
+                    &.none__active-button-class{
+                        background: #33C173;
+                        border-top-left-radius: 8px;
+                        border-bottom-left-radius: 8px;
+
+                        span{
+                            color: #FFFFFF;
+                        }
+                    }
+                    &.none__inactive-button-class{
+                        background: #EEF3F5 !important;
+                        span{
+                            color: #ABAFB1;
+                        }
+                    }
+                }
+                .view__button{
+                    &.view__active-button-class{
+                        background: #33C173;
+                        span{
+                            color: #FFFFFF;
+                        }
+                    }
+                    &.view__inactive-button-class{
+                        background: #EEF3F5 !important;
+                        span{
+                            color: #ABAFB1;
+                        }
+                    }
+                }
+                .edit__button{
+                    border-top-right-radius: 8px;
+                    border-bottom-right-radius: 8px;
+
+                    &.edit__active-button-class{
+                        background: #33C173;
+                        span{
+                            color: #FFFFFF;
+                        }
+                    }
+                    &.edit__inactive-button-class{
+                        background: #EEF3F5 !important;
+                        span{
+                            color: #ABAFB1;
+                        }
+                    }
+                }
+            }
+            .permission__toggle{
+                .yes__btn,.no__btn {
+                    width: 200px;
+                    height: 39px;
+
+                    span{
+                        @include btn_span_styles();
+                    }
+                }
+
+                .yes__btn{
+                    border-top-right-radius: 8px;
+                    border-bottom-right-radius: 8px;
+
+                    &.yes__active-button-class{
+                        background: #33C173;
+                        span{
+                            color: #FFFFFF;
+                        }
+                    }
+                    &.yes__inactive-button-class{
+                        background: #EEF3F5 !important;
+                        span{
+                            color: #ABAFB1;
+                        }
+                    }
+                }
+
+                .no__btn{
+                    border-top-left-radius: 8px;
+                    border-bottom-left-radius: 8px;
+
+                    &.no__active-button-class{
+                        background: #33C173;
+                        span{
+                            color: #FFFFFF;
+                        }
+                    }
+                    &.no__inactive-button-class{
+                        background: #EEF3F5 !important;
+                        span{
+                            color: #ABAFB1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .role-control-buttons{
+        margin-top: 5rem !important;
+        margin-bottom: 6rem !important;
+
+        .cancel__btn,.save__btn{
+            width: 375px;
+            height: 58px;
+            border-radius: 8px;
+        }
+
+        .cancel__btn {
+            background: #EEF3F5 !important;
+            margin-right: 30px;
+                span{
+                    color: #5E6366;
+                }
+        }
+        .save__btn {
+            background: #33C173;
+            span{
+                color: #FFFFFF;
+            }
+            
+        }
+    }
+}
+

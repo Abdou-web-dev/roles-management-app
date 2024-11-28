@@ -60,6 +60,51 @@
 
         }
       }
+
+      .create-custom-role-page{
+        .btn_and_title{
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 1rem;
+          .back__button{
+            display: flex;
+            align-items: center;
+            gap: .3rem;
+            img{
+              
+            }
+            span{
+              font-family: Inter;
+              // border: 10px solid;
+              font-size: 14px;
+              font-weight: 400;
+              line-height: 16.94px;
+              text-align: right;
+              color: #83898C;
+              text-decoration-line : none !important;
+            }
+          }
+          h2{
+            color: #2B2F32;
+            font-family: Inter;
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 29.05px;
+          }
+        }
+        h3{
+          color: #83898C;
+          font-family: Inter;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 16.94px;
+          text-align: left;
+          text-underline-position: from-font;
+          text-decoration-skip-ink: none;
+          margin-bottom: 1.75rem;
+        }
+      }
     }
 }
 

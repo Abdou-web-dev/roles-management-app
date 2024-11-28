@@ -28,34 +28,42 @@ const PermissionSelector: FunctionComponent<PermissionSelectorProps> = ({
     setSelectedPermission(accessLevelValue);
   };
 
-  const getColor = (permission: string) => {
-    return selectedPermission === permission ? "#33C173" : "#ABAFB1"; // Green if selected, grey if not
-  };
+  // const getColor = (permission: string) => {
+  //   return selectedPermission === permission ? "#33C173" : "#ABAFB1"; // Green if selected, grey if not
+  // };
 
   return (
-    <div className="flex flex-col justify-between items-center space-x-4">
-      <div className="flex gap-0">
-        <div
+    <div className="flex flex-col justify-between  permission-selector-container">
+      <div className="">
+        <button
+          // Warning: You submitted a Formik form using a button with an unspecified `type` attribute.  Most browsers default button elements to `type="submit"`. If this is not a submit button, please add `type="button"`.
+          type="button"
+          className={`none__button ${
+            selectedPermission === "None" ? "none__active-button-class" : "none__inactive-button-class"
+          }`}
           onClick={() => handleClick("None")}
-          className="cursor-pointer text-center py-2 px-4 "
-          style={{ backgroundColor: getColor("None") }}
+          // style={{ backgroundColor: getColor("None") }}
         >
           <span>None</span>
-        </div>
-        <div
+        </button>
+        <button
+          type="button"
+          className={`view__button ${
+            selectedPermission === "View" ? "view__active-button-class" : "view__inactive-button-class"
+          }`}
           onClick={() => handleClick("View")}
-          className="cursor-pointer text-center py-2 px-4"
-          style={{ backgroundColor: getColor("View") }}
         >
           <span>View</span>
-        </div>
-        <div
+        </button>
+        <button
+          type="button"
+          className={`edit__button ${
+            selectedPermission === "Edit" ? "edit__active-button-class" : "edit__inactive-button-class"
+          }`}
           onClick={() => handleClick("Edit")}
-          className="cursor-pointer text-center py-2 px-4"
-          style={{ backgroundColor: getColor("Edit") }}
         >
           <span>Edit</span>
-        </div>
+        </button>
       </div>
     </div>
   );
