@@ -35,12 +35,13 @@ const Team = () => {
     fetchRoles();
   }, []);
 
-  useEffect(() => {
-    console.log(roles, "list of roles is : ");
-  }, [roles]);
-
   const handleAddRoleClick = () => setIsCreatingRole(true);
   const handleBackClick = () => setIsCreatingRole(false);
+
+  const addNewRole = (newRole: Role) => {
+    // Optimistic UI update: add the role immediately to the roles state
+    setRoles((prevRoles: Role[]) => [newRole, ...prevRoles]);
+  };
 
   if (loading)
     return (
@@ -56,10 +57,14 @@ const Team = () => {
       {!isCreatingRole && <h1 className="h1">User Roles</h1>}
       <div className="roles-tile-list-wrapper">
         {!isCreatingRole ? (
+          // Roles tile list View
           <ul className="roles-grid-ul grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {roles?.map((role: Role, index: number) => (
               <React.Fragment key={role.id}>
-                <RoleCard role={role} />
+                <RoleCard
+                  {...{ setRoles }}
+                  role={role}
+                />
                 {index === roles.length - 1 && (
                   // The conditional index === roles.length - 1 && ... ensures the button is displayed only after the last role.
                   <button
@@ -79,6 +84,7 @@ const Team = () => {
             ))}
           </ul>
         ) : (
+          // Role form View
           <div className="create-custom-role-page pr-2">
             <div className="btn_and_title">
               <h2 className="font-bold mb-4">Create Custom Role</h2>
@@ -94,7 +100,10 @@ const Team = () => {
               </button>
             </div>
             <h3>Configure general information and permissions below. Don’t forget to save the Custom Role.</h3>
-            <RoleForm />
+            <RoleForm
+              {...{ setIsCreatingRole }}
+              onRoleCreated={addNewRole}
+            />
           </div>
         )}
       </div>
