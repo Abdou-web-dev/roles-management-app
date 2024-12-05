@@ -1,25 +1,25 @@
 import { FunctionComponent, useState } from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import RoleIcons from "./RoleIcons";
-import { addRole } from "../services/api";
-import { accessLevelMapping, CUSTOM_IDENTIFIER, permissionsArray } from "../constants/const";
 import PermissionSelector from "./PermissionSelector";
 import { Permission, Role } from "../interfaces/RoleInterface";
 import { PermissionToggle } from "./PermissionToggle";
 import { NiceSpinner } from "./NiceSpinner";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useFormik } from "formik";
+import { accessLevelMapping, CUSTOM_IDENTIFIER, permissionsArray } from "../constants/const";
+import * as Yup from "yup";
+import { addRole } from "../services/api";
+import { toast } from "react-toastify";
 
 const RoleForm: FunctionComponent<{
-  onRoleCreated: (newRole: Role) => void;
   setIsCreatingRole: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ setIsCreatingRole, onRoleCreated }) => {
+  addNewRole: any;
+}> = ({ setIsCreatingRole, addNewRole }) => {
   const [loading, setLoading] = useState(false); // state to manage loading spinner visibility
   const notifySuccess = () => toast.success("Role created successfully !");
   const notifyError = () => toast.error("Oops! Something went wrong! Please try again !");
 
-  const formik = useFormik({
+  const roleFormik = useFormik({
     initialValues: {
       roleName: "",
       roleIcon: 0,
@@ -58,7 +58,7 @@ const RoleForm: FunctionComponent<{
 
         const newRole = addRoleResponse.data;
         // Optimistic UI: add new role immediately to parent state
-        onRoleCreated(newRole as Role);
+        addNewRole(newRole as Role);
 
         notifySuccess();
       } catch (error) {
@@ -78,16 +78,20 @@ const RoleForm: FunctionComponent<{
 
   const onPermissionChange = (updatedPermission: Permission) => {
     // Update the permission in Formik's state using setFieldValue
-    const permissionIndex = formik.values.permissions.findIndex((permission) => permission.id === updatedPermission.id);
+    const permissionIndex = roleFormik.values.permissions.findIndex(
+      (permission: Permission) => permission.id === updatedPermission.id
+    );
     if (permissionIndex >= 0) {
-      formik.setFieldValue(`permissions[${permissionIndex}].accessLevel`, updatedPermission.accessLevel);
+      roleFormik.setFieldValue(`permissions[${permissionIndex}].accessLevel`, updatedPermission.accessLevel);
     }
   };
+
+  const inputError = roleFormik.touched.roleName && roleFormik.errors.roleName;
 
   return (
     <>
       <form
-        onSubmit={formik.handleSubmit}
+        onSubmit={roleFormik.handleSubmit}
         className={`space-y-4 role-form-container transition-opacity ${loading ? "opacity-50" : "opacity-100"} `}
         style={{ filter: loading ? "blur(4px)" : "none" }}
       >
@@ -98,13 +102,13 @@ const RoleForm: FunctionComponent<{
             id="roleName"
             name="roleName"
             placeholder="Input Custom Role Name"
-            className="mt-1 block w-full rounded-md"
-            value={formik.values.roleName}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            className={` mt-1 block w-full rounded-md ${inputError ? "input__error" : ""}`}
+            value={roleFormik.values.roleName}
+            onChange={roleFormik.handleChange}
+            onBlur={roleFormik.handleBlur}
           />
-          {formik.touched.roleName && formik.errors.roleName && (
-            <div className="role__name_error">{formik.errors.roleName}</div>
+          {roleFormik.touched.roleName && roleFormik.errors.roleName && (
+            <div className="role__name_error">{roleFormik.errors.roleName}</div>
           )}
         </div>
 
@@ -116,8 +120,8 @@ const RoleForm: FunctionComponent<{
             Select Role Icon
           </label>
           <RoleIcons
-            selectedIcon={formik.values.roleIcon}
-            setSelectedIcon={(iconIndex: number) => formik.setFieldValue("roleIcon", iconIndex)}
+            selectedIcon={roleFormik.values.roleIcon}
+            setSelectedIcon={(iconIndex: number) => roleFormik.setFieldValue("roleIcon", iconIndex)}
           />
         </div>
 
@@ -125,7 +129,7 @@ const RoleForm: FunctionComponent<{
         <div className="permissions-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 gap-x-0">
           {permissionsArray?.map(({ name, label }) => {
             const isBinaryPermission = name === "EditAdmins" || name === "TransferFacilities";
-            const permission = formik.values.permissions.find((perm: Permission) => perm.id === name);
+            const permission = roleFormik.values.permissions.find((perm: Permission) => perm.id === name);
             if (!permission) return null;
 
             return (
@@ -136,19 +140,21 @@ const RoleForm: FunctionComponent<{
                 <label className="perm__label">{label}</label>
                 {isBinaryPermission ? (
                   <PermissionToggle
+                    key={`toggle-${name}`}
                     permission={permission.id}
                     accessLevel={permission.accessLevel}
                     onChange={onPermissionChange} // This passes the `onPermissionChange` function defined in the parent
                     initialPermission={
-                      formik.values.permissions.find((permission) => permission.id === name)?.accessLevel
+                      roleFormik.values.permissions.find((permission) => permission.id === name)?.accessLevel
                     }
                   />
                 ) : (
                   <>
                     <PermissionSelector
+                      key={`selector-${name}`}
                       onPermissionChange={onPermissionChange}
                       initialPermission={
-                        formik.values.permissions.find((permission) => permission.id === name)?.accessLevel
+                        roleFormik.values.permissions.find((permission) => permission.id === name)?.accessLevel
                       }
                       permissionType={name}
                     />
@@ -164,7 +170,7 @@ const RoleForm: FunctionComponent<{
             type="button"
             className="cancel__btn"
             onClick={() => {
-              formik.resetForm();
+              roleFormik.resetForm();
               setIsCreatingRole(false);
             }}
           >
@@ -172,8 +178,8 @@ const RoleForm: FunctionComponent<{
           </button>
           <button
             type="submit"
-            className={`save__btn ${formik.isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
-            disabled={formik.isSubmitting}
+            className={`save__btn ${roleFormik.isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
+            disabled={roleFormik.isSubmitting}
           >
             <span>Save Changes</span>
           </button>

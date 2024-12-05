@@ -1,3 +1,5 @@
+import { FormikErrors, FormikTouched } from "formik";
+
 // Enums
 export enum PermissionType {
   Locks = "1",
@@ -25,6 +27,27 @@ export interface Permission {
   id: PermissionType | string;
   accessLevel: AccessLevel | string;
 }
+
+type InitialValues = {
+  roleName: string;
+  roleIcon: number;
+  permissions: Permission[];
+};
+
+export type RoleFormik = {
+  initialValues: InitialValues;
+  errors: FormikErrors<InitialValues>;
+  touched: FormikTouched<InitialValues>;
+  values: InitialValues;
+  submitCount: number;
+  isSubmitting: boolean;
+  isValidating: boolean;
+  isValid: boolean;
+  handleChange: (e: React.ChangeEvent<any>) => void;
+  handleBlur: (e: React.FocusEvent<any>) => void;
+  handleSubmit: (e?: React.FormEvent<HTMLFormElement>) => void;
+  setFieldValue: (field: keyof InitialValues, value: any, shouldValidate?: boolean) => void;
+};
 
 export interface Role {
   identifier: string;

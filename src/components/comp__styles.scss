@@ -165,6 +165,9 @@ li.role__card-container{
                 border: 1px solid rgba(207, 211, 212, 0.5);
                 box-shadow: rgba(0, 0, 0, 0.02) 0px 0px 0px 1px;    
             }
+            &.input__error{
+                border: 1px solid #F57E77;
+            }
         }
         .role__name_error{
             font-family: 'Inter';
@@ -317,8 +320,46 @@ li.role__card-container{
                     }
                 }
             }
+           
+
         }
+        
+        @media only screen and (min-width: 1300px) and (max-width: 1400px) {
+            // PermissionToggle and PermissionSelector buttons
+            button:not(.yes__btn):not(.no__btn) {
+                width: 120px !important;
+            }
+            button{
+                &.yes__btn,&.no__btn{
+                    width: 180px !important;
+                }
+            }
+        }
+
+        @media only screen and (min-width: 1200px) and (max-width: 1300px) {
+            button:not(.yes__btn):not(.no__btn) {
+                width: 105px !important;
+            }
+            button{
+                &.yes__btn,&.no__btn{
+                    width: 157.5px !important;
+                }
+            }
     }
+      
+        @media only screen and (min-width: 1000px) and (max-width: 1200px) {
+            
+            button:not(.yes__btn):not(.no__btn) {
+                width: 83px !important;
+            }
+            button{
+                &.yes__btn,&.no__btn{
+                    width: 124.5px !important;
+                }
+            }
+    }
+    }
+ 
     .role-control-buttons{
         margin-top: 5rem !important;
         margin-bottom: 6rem !important;

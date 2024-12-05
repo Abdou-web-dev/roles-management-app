@@ -1,10 +1,5 @@
 import { FunctionComponent } from "react";
 
-// interface AdminIconProps {}
-// interface PersonelIconProps {}
-// interface ManagerIconProps {}
-// interface FinanceOfficerIconProps {}
-// interface ItSupportProps {}
 interface IconProps {
   fillColor: string; // Accept fill color as prop
 }

@@ -5,9 +5,9 @@ import { getRoles } from "../services/api";
 import { CUSTOM_IDENTIFIER } from "../constants/const";
 import { RoleCard } from "../components/RoleCard";
 import "./pages__styles.scss";
-import plus__icon from "../assets/plus__icon.svg";
 import RoleForm from "../components/RoleForm";
 import back from "../assets/back.svg";
+import AddCustomRoleButton from "../components/AddCustomRoleButton";
 
 const Team = () => {
   const [roles, setRoles] = useState<Role[]>([]);
@@ -59,29 +59,24 @@ const Team = () => {
         {!isCreatingRole ? (
           // Roles tile list View
           <ul className="roles-grid-ul grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {roles?.map((role: Role, index: number) => (
-              <React.Fragment key={role.id}>
-                <RoleCard
-                  {...{ setRoles }}
-                  role={role}
-                />
-                {index === roles.length - 1 && (
-                  // The conditional index === roles.length - 1 && ... ensures the button is displayed only after the last role.
-                  <button
-                    onClick={handleAddRoleClick}
-                    className="add__custom_role_button col-span-1 sm:col-span-1 md:col-span-1 lg:col-span-1 justify-self-start border rounded-lg p-4 
-                             h-full w-full shadow-sm hover:shadow-md "
-                  >
-                    <img
-                      src={plus__icon}
-                      alt=""
-                      className="mr-2 mb-6"
+            {roles?.map((role: Role, index: number) => {
+              // The conditional index === roles.length - 1 && ... ensures the button is displayed only after the last role.
+              const isLastElement = index === roles.length - 1;
+              const isNotLastElement = !isLastElement;
+
+              return (
+                <React.Fragment key={isLastElement ? "add_custom_role_btn" : role.id}>
+                  {isNotLastElement ? (
+                    <RoleCard
+                      {...{ setRoles }}
+                      role={role}
                     />
-                    <span> Add Custom Role</span>
-                  </button>
-                )}
-              </React.Fragment>
-            ))}
+                  ) : isLastElement ? (
+                    <AddCustomRoleButton {...{ handleAddRoleClick }} />
+                  ) : null}
+                </React.Fragment>
+              );
+            })}
           </ul>
         ) : (
           // Role form View
@@ -102,7 +97,7 @@ const Team = () => {
             <h3>Configure general information and permissions below. Don’t forget to save the Custom Role.</h3>
             <RoleForm
               {...{ setIsCreatingRole }}
-              onRoleCreated={addNewRole}
+              addNewRole={addNewRole}
             />
           </div>
         )}

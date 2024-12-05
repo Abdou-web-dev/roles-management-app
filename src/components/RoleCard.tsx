@@ -1,11 +1,15 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { Role } from "../interfaces/RoleInterface";
 import "./comp__styles.scss";
-import roleIcon from "../assets/roleIcon.svg";
 import userAssignIcon from "../assets/userAssignIcon.svg";
 import { formatNumberThousands } from "../utils/helpers";
 import editIcon from "../assets/editIcon.svg";
 import deleteIcon from "../assets/deleteIcon.svg";
+import admin from "../assets/roles/admin.svg";
+import bag from "../assets/roles/vendor.svg";
+import manager from "../assets/roles/manager.svg";
+import personel from "../assets/roles/personel.svg";
+import call_center__agent from "../assets/roles/call_center__agent.svg";
 import { deleteRole } from "../services/api";
 import { CUSTOM_IDENTIFIER } from "../constants/const";
 import { toast } from "react-toastify";
@@ -21,6 +25,7 @@ export const RoleCard: FunctionComponent<RoleCardProps> = ({ role, setRoles }) =
     toast.error("Failed to delete role. Please try again.", {
       position: "top-right",
     });
+
   const handleDeleteRole = async () => {
     try {
       // Optimistically remove the role
@@ -64,6 +69,31 @@ export const RoleCard: FunctionComponent<RoleCardProps> = ({ role, setRoles }) =
     };
   }, [setShowConfirmModal]);
 
+  const setRoleIcon = () => {
+    let icon: string = "";
+    if (role)
+      switch (role?.roleIcon) {
+        case 0:
+          icon = admin;
+          break;
+        case 1:
+          icon = personel;
+          break;
+        case 2:
+          icon = manager;
+          break;
+        case 3:
+          icon = bag;
+          break;
+        case 4:
+          icon = call_center__agent;
+          break;
+        default:
+          break;
+      }
+    return icon;
+  };
+
   if (role)
     return (
       <li className="role__card-container">
@@ -101,8 +131,10 @@ export const RoleCard: FunctionComponent<RoleCardProps> = ({ role, setRoles }) =
         <div className="role-category flex flex-col justify-center items-center">
           <img
             className="role__icon"
-            src={roleIcon}
+            src={setRoleIcon()}
             alt=""
+            width={`80px`}
+            height={`80px`}
           />
           <span className="admin__text">{role.name}</span>
           <div className="users_wrapper">
