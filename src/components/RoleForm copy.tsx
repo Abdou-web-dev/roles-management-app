@@ -1,59 +1,37 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useState } from "react";
 import RoleIcons from "./RoleIcons";
 import PermissionSelector from "./PermissionSelector";
-import { Permission, PermissionType, Role, updateRoleDataPayload } from "../interfaces/RoleInterface";
+import { Permission, Role } from "../interfaces/RoleInterface";
 import { PermissionToggle } from "./PermissionToggle";
 import { NiceSpinner } from "./NiceSpinner";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
-import {
-  accessLevelMapping,
-  accessLevelMappingReverse,
-  CUSTOM_IDENTIFIER,
-  idToNameMap,
-  permissionsArray,
-} from "../constants/const";
+import { accessLevelMapping, CUSTOM_IDENTIFIER, permissionsArray } from "../constants/const";
 import * as Yup from "yup";
-import { addRole, updateRole } from "../services/api";
+import { addRole } from "../services/api";
 import { toast } from "react-toastify";
 
 const RoleForm: FunctionComponent<{
-  roleToEdit?: Role | null;
   setIsCreatingRole: React.Dispatch<React.SetStateAction<boolean>>;
-  addOrUpdateNewRole: any;
-}> = ({ setIsCreatingRole, addOrUpdateNewRole, roleToEdit }) => {
+  addNewRole: any;
+}> = ({ setIsCreatingRole, addNewRole }) => {
   const [loading, setLoading] = useState(false); // state to manage loading spinner visibility
-  const notifySuccess = () => toast.success(`Role ${roleToEdit ? "updated" : "created"} successfully!`);
+  const notifySuccess = () => toast.success("Role created successfully !");
   const notifyError = () => toast.error("Oops! Something went wrong! Please try again !");
 
-  const initialValues = {
-    roleName: roleToEdit?.name || "",
-    roleIcon: roleToEdit?.roleIcon || 0,
-    permissions:
-      (roleToEdit &&
-        roleToEdit?.permissions?.map(({ id, accessLevel }) => ({
-          // @ts-ignore
-          id: idToNameMap[id] || `Unknown-${id}`, // Fallback for unmapped IDs
-          accessLevel:
-            // @ts-ignore
-            accessLevelMappingReverse[accessLevel] || "None", // Fallback for unmapped access levels
-        }))) ||
-      permissionsArray?.map(({ name }) => ({
-        id: name,
-        accessLevel: roleToEdit
-          ? roleToEdit?.permissions?.find((perm: any) => perm.id === name)?.accessLevel || "None" // Use 'None' if not found
-          : name === "EditAdmins" || name === "TransferFacilities"
-          ? 0
-          : "None", // Set to 'No' for binary permissions initially
-      })),
-  };
-
   const roleFormik = useFormik({
-    initialValues: initialValues,
+    initialValues: {
+      roleName: "",
+      roleIcon: 0,
+      permissions: permissionsArray.map(({ name }) => ({
+        id: name, // Permission name as the id (or use an enum if available) // accessLevel: "None", // Default access level
+        accessLevel: name === "TransferFacilities" || name === "EditAdmins" ? 0 : "None", // Set to 'No' for binary permissions initially
+      })),
+    },
+
     validationSchema: Yup.object({
       roleName: Yup.string().required("Role name is required"),
     }),
-    enableReinitialize: true, // Ensures form re-initializes when `roleToEdit` changes
 
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
@@ -70,43 +48,17 @@ const RoleForm: FunctionComponent<{
       }));
 
       try {
-        const createRolePayload = {
-          name: values.roleName,
-          roleIcon: values.roleIcon,
-          permissions: permissions,
-        };
-        const updateRolePayload = {
-          id: roleToEdit?.id, // Extract the id from roleToEdit
+        const permissionsPayload = {
           name: values.roleName,
           roleIcon: values.roleIcon,
           permissions: permissions,
         };
 
-        if (roleToEdit) {
-          // Call update API
-          const updateRoleResponse: any | Role = await updateRole(
-            CUSTOM_IDENTIFIER,
-            updateRolePayload as updateRoleDataPayload
-          );
-          const newUpdatedRole = updateRoleResponse?.data;
+        const addRoleResponse: any | Role = await addRole(CUSTOM_IDENTIFIER, permissionsPayload);
 
-          // Optimistic UI: add new role immediately to parent state
-          addOrUpdateNewRole(newUpdatedRole as Role);
-        } else {
-          try {
-            // Call create API
-            const addRoleResponse: any | Role = await addRole(CUSTOM_IDENTIFIER, createRolePayload);
-
-            const newCreatedRole = addRoleResponse?.data;
-            // Optimistic UI: add new role immediately to parent state
-            addOrUpdateNewRole(newCreatedRole as Role);
-            if (!addRoleResponse?.data) {
-              console.error("Failed to update role:", addRoleResponse?.error);
-            }
-          } catch (error) {
-            console.error("Error updating role:", error);
-          }
-        }
+        const newRole = addRoleResponse.data;
+        // Optimistic UI: add new role immediately to parent state
+        addNewRole(newRole as Role);
 
         notifySuccess();
       } catch (error) {
@@ -127,7 +79,6 @@ const RoleForm: FunctionComponent<{
   const onPermissionChange = (updatedPermission: Permission) => {
     // Update the permission in Formik's state using setFieldValue
     const permissionIndex = roleFormik.values.permissions.findIndex(
-      // @ts-ignore
       (permission: Permission) => permission.id === updatedPermission.id
     );
     if (permissionIndex >= 0) {
@@ -153,7 +104,6 @@ const RoleForm: FunctionComponent<{
             placeholder="Input Custom Role Name"
             className={` mt-1 block w-full rounded-md ${inputError ? "input__error" : ""}`}
             value={roleFormik.values.roleName}
-            // value={roleToEdit ? roleToEdit?.name : roleFormik.values.roleName}
             onChange={roleFormik.handleChange}
             onBlur={roleFormik.handleBlur}
           />
@@ -180,18 +130,6 @@ const RoleForm: FunctionComponent<{
           {permissionsArray?.map(({ name, label }) => {
             const isBinaryPermission = name === "EditAdmins" || name === "TransferFacilities";
             const permission = roleFormik.values.permissions.find((perm: Permission) => perm.id === name);
-
-            const roleToEditPermission = roleToEdit?.permissions?.find((perm: Permission) => {
-              // Check if name corresponds to a key in PermissionType and compare it with the perm.id
-              const permissionTypeId = PermissionType[name as keyof typeof PermissionType]; // Get the enum value corresponding to the name
-              return Number(perm?.id) === Number(permissionTypeId); // Compare the permission id correctly
-            });
-
-            const oldPermissionAccessLevel: string =
-              roleToEditPermission?.accessLevel !== undefined
-                ? accessLevelMappingReverse[roleToEditPermission?.accessLevel as number]
-                : "None"; // Default to "None" if undefined
-
             if (!permission) return null;
 
             return (
@@ -203,12 +141,11 @@ const RoleForm: FunctionComponent<{
                 {isBinaryPermission ? (
                   <PermissionToggle
                     key={`toggle-${name}`}
-                    permission={permission.id} // @ts-ignore
+                    permission={permission.id}
                     accessLevel={permission.accessLevel}
                     onChange={onPermissionChange} // This passes the `onPermissionChange` function defined in the parent
-                    initialAccessLevel={
-                      roleFormik.values.permissions.find((permission: Permission) => permission.id === name)
-                        ?.accessLevel
+                    initialPermission={
+                      roleFormik.values.permissions.find((permission) => permission.id === name)?.accessLevel
                     }
                   />
                 ) : (
@@ -216,11 +153,8 @@ const RoleForm: FunctionComponent<{
                     <PermissionSelector
                       key={`selector-${name}`}
                       onPermissionChange={onPermissionChange}
-                      initialAccessLevel={
-                        roleToEdit
-                          ? (oldPermissionAccessLevel as string) || "None"
-                          : roleFormik.values.permissions.find((permission: Permission) => permission.id === name)
-                              ?.accessLevel || "None"
+                      initialPermission={
+                        roleFormik.values.permissions.find((permission) => permission.id === name)?.accessLevel
                       }
                       permissionType={name}
                     />

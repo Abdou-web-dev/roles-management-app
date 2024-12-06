@@ -50,7 +50,6 @@ export type RoleFormik = {
 };
 
 export interface Role {
-  identifier: string;
   id: string;
   name: string;
   isCustom: boolean;

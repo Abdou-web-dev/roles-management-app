@@ -2,18 +2,18 @@ import { FunctionComponent, useState } from "react";
 import { AccessLevel, Permission, PermissionType } from "../interfaces/RoleInterface";
 
 interface PermissionSelectorProps {
-  initialPermission: string | AccessLevel | undefined; // Initial value for the permission (e.g., "None")
+  initialAccessLevel: string | AccessLevel | undefined; // Initial value for the permission (e.g., "None")
   onPermissionChange: (newPermission: any) => void;
   permissionType: PermissionType | string;
 }
 
 const PermissionSelector: FunctionComponent<PermissionSelectorProps> = ({
-  initialPermission,
+  initialAccessLevel,
   onPermissionChange,
   permissionType,
 }) => {
   // Local state for tracking selected permission
-  const [selectedPermission, setSelectedPermission] = useState<string | AccessLevel | undefined>(initialPermission);
+  const [selectedPermission, setSelectedPermission] = useState<string | AccessLevel | undefined>(initialAccessLevel);
 
   const handleClick = (accessLevelValue: AccessLevel | string) => {
     const permissionObj: Permission = {

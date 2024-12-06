@@ -5,16 +5,16 @@ interface PermissionToggleProps {
   permission: string;
   accessLevel: number | string;
   onChange: (updatedPermission: Permission) => void;
-  initialPermission: string | AccessLevel | undefined; // Initial value for the permission (e.g., "None")
+  initialAccessLevel: string | AccessLevel | undefined; // Initial value for the permission (e.g., "None")
 }
 
 export const PermissionToggle: FunctionComponent<PermissionToggleProps> = ({
   permission,
   accessLevel,
   onChange,
-  initialPermission,
+  initialAccessLevel,
 }) => {
-  const [selectedPermission, setSelectedPermission] = useState<string | AccessLevel | undefined>(initialPermission);
+  const [selectedPermission, setSelectedPermission] = useState<string | AccessLevel | undefined>(initialAccessLevel);
 
   const handleClick = (accessLevelValue: AccessLevel | string) => {
     const permissionObj: Permission = {

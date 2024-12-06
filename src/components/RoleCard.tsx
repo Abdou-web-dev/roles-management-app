@@ -1,5 +1,5 @@
 import { FunctionComponent, useEffect, useState } from "react";
-import { Role } from "../interfaces/RoleInterface";
+import { Permission, Role } from "../interfaces/RoleInterface";
 import "./comp__styles.scss";
 import userAssignIcon from "../assets/userAssignIcon.svg";
 import { formatNumberThousands } from "../utils/helpers";
@@ -17,9 +17,11 @@ import { toast } from "react-toastify";
 interface RoleCardProps {
   role: Role;
   setRoles: React.Dispatch<React.SetStateAction<Role[]>>;
+  setIsCreatingRole: React.Dispatch<React.SetStateAction<boolean>>;
+  setRoleToEdit: React.Dispatch<React.SetStateAction<Role | null>>;
 }
 
-export const RoleCard: FunctionComponent<RoleCardProps> = ({ role, setRoles }) => {
+export const RoleCard: FunctionComponent<RoleCardProps> = ({ role, setRoles, setIsCreatingRole, setRoleToEdit }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const deleteError = () =>
     toast.error("Failed to delete role. Please try again.", {
@@ -94,6 +96,11 @@ export const RoleCard: FunctionComponent<RoleCardProps> = ({ role, setRoles }) =
     return icon;
   };
 
+  const editRole = (): void => {
+    setIsCreatingRole(true);
+    setRoleToEdit(role); // Pass the current role to the parent state
+  };
+
   if (role)
     return (
       <li className="role__card-container">
@@ -105,8 +112,7 @@ export const RoleCard: FunctionComponent<RoleCardProps> = ({ role, setRoles }) =
           {role?.name === "Admin" || role?.name === "Personel" ? null : (
             <div className="control__icons flex">
               <button
-                // onClick={editRole}
-
+                onClick={editRole}
                 className="edit-icon transform transition-transform duration-300 hover:scale-110"
               >
                 <img

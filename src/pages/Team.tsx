@@ -14,6 +14,7 @@ const Team = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isCreatingRole, setIsCreatingRole] = useState(false);
+  const [roleToEdit, setRoleToEdit] = useState<Role | null>(null);
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -38,10 +39,34 @@ const Team = () => {
   const handleAddRoleClick = () => setIsCreatingRole(true);
   const handleBackClick = () => setIsCreatingRole(false);
 
-  const addNewRole = (newRole: Role) => {
+  // const addNewRole = (newRole: Role) => {
+  //   // Optimistic UI update: add the role immediately to the roles state
+  //   setRoles((prevRoles: Role[]) => [newRole, ...prevRoles]);
+  // };
+
+  const addOrUpdateNewRole = (newRole: Role) => {
     // Optimistic UI update: add the role immediately to the roles state
-    setRoles((prevRoles: Role[]) => [newRole, ...prevRoles]);
+    setRoles((prevRoles: Role[]) => {
+      const existingRoleIndex = prevRoles?.findIndex((role) => role?.id === newRole?.id);
+      if (existingRoleIndex !== -1) {
+        // Update existing role
+        const updatedRoles = [...prevRoles];
+        updatedRoles[existingRoleIndex] = newRole;
+        // console.log(updatedRoles, "updatedRoles");
+        return updatedRoles;
+      } else {
+        // Add new role
+        const newRoles = [newRole, ...prevRoles];
+        // console.log(newRoles, "newRoles");
+
+        return newRoles;
+      }
+    });
   };
+
+  useEffect(() => {
+    if (roles) console.log(roles, "list of roles");
+  }, [roles]);
 
   if (loading)
     return (
@@ -60,29 +85,24 @@ const Team = () => {
           // Roles tile list View
           <ul className="roles-grid-ul grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {roles?.map((role: Role, index: number) => {
-              // The conditional index === roles.length - 1 && ... ensures the button is displayed only after the last role.
-              const isLastElement = index === roles.length - 1;
-              const isNotLastElement = !isLastElement;
-
               return (
-                <React.Fragment key={isLastElement ? "add_custom_role_btn" : role.id}>
-                  {isNotLastElement ? (
-                    <RoleCard
-                      {...{ setRoles }}
-                      role={role}
-                    />
-                  ) : isLastElement ? (
-                    <AddCustomRoleButton {...{ handleAddRoleClick }} />
-                  ) : null}
+                <React.Fragment key={index + role.id}>
+                  <RoleCard
+                    {...{ setRoles, setIsCreatingRole, setRoleToEdit }}
+                    role={role}
+                  />
                 </React.Fragment>
               );
             })}
+
+            {/* Add the button after the roles are rendered */}
+            <AddCustomRoleButton {...{ setRoleToEdit, handleAddRoleClick }} />
           </ul>
         ) : (
           // Role form View
           <div className="create-custom-role-page pr-2">
             <div className="btn_and_title">
-              <h2 className="font-bold mb-4">Create Custom Role</h2>
+              <h2 className="font-bold mb-4">{roleToEdit ? "Edit Custom Role" : "Create Custom Role"}</h2>
               <button
                 className="back__button"
                 onClick={handleBackClick}
@@ -96,8 +116,8 @@ const Team = () => {
             </div>
             <h3>Configure general information and permissions below. Don’t forget to save the Custom Role.</h3>
             <RoleForm
-              {...{ setIsCreatingRole }}
-              addNewRole={addNewRole}
+              {...{ setIsCreatingRole, roleToEdit }}
+              addOrUpdateNewRole={addOrUpdateNewRole}
             />
           </div>
         )}

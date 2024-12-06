@@ -218,8 +218,10 @@ li.role__card-container{
             } 
             .permission-selector-container{
                 .none__button,.view__button,.edit__button{
-                    width: 133.33px;
+                    // width: 133.33px;
+                    width: 8.68vw;
                     height: 39px;
+                    // border: 1px solid red;
                     span{
                       @include btn_span_styles();
                     }
@@ -276,7 +278,8 @@ li.role__card-container{
             }
             .permission__toggle{
                 .yes__btn,.no__btn {
-                    width: 200px;
+                    // width: 200px;
+                    width: 13.02vw;
                     height: 39px;
 
                     span{

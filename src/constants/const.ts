@@ -5,16 +5,34 @@ export const accessLevelMapping: { [key in "None" | "View" | "Edit"]: number } =
   View: 1,
   Edit: 2,
 };
+// Reverse the mapping: number to string
+export const accessLevelMappingReverse: { [key in number]: "None" | "View" | "Edit" } = {
+  0: "None",
+  1: "View",
+  2: "Edit",
+};
 
+export const idToNameMap: Record<number, string> = {
+  1: "Locks",
+  2: "ActivateLocks",
+  3: "Inventory",
+  4: "TenantLocks",
+  5: "Facilities",
+  6: "TransferFacilities",
+  7: "Users",
+  8: "EditAdmins",
+  9: "Subdomains",
+  10: "ApiSettings",
+};
 export const permissionsArray = [
-  { name: "Locks", label: "Locks", field: "locksPermission" },
-  { name: "ActivateLocks", label: "Activate Locks", field: "activateLocksPermission" },
-  { name: "Inventory", label: "Inventory", field: "inventoryPermission" },
-  { name: "TenantLocks", label: "Tenant Locks", field: "tenantLocksPermission" },
-  { name: "Facilities", label: "Facilities", field: "facilitiesPermission" },
-  { name: "TransferFacilities", label: "Transfer Facilities", field: "transferFacilitiesPermission" },
-  { name: "Users", label: "Users", field: "usersPermission" },
-  { name: "EditAdmins", label: "Edit Admins", field: "editAdminsPermission" },
-  { name: "Subdomains", label: "Subdomains", field: "subdomainsPermission" },
-  { name: "ApiSettings", label: "API Settings", field: "apiSettingsPermission" },
+  { id: 1, name: "Locks", label: "Locks", field: "locksPermission" },
+  { id: 2, name: "ActivateLocks", label: "Activate Locks", field: "activateLocksPermission" },
+  { id: 3, name: "Inventory", label: "Inventory", field: "inventoryPermission" },
+  { id: 4, name: "TenantLocks", label: "Tenant Locks", field: "tenantLocksPermission" },
+  { id: 5, name: "Facilities", label: "Facilities", field: "facilitiesPermission" },
+  { id: 6, name: "TransferFacilities", label: "Transfer Facilities", field: "transferFacilitiesPermission" },
+  { id: 7, name: "Users", label: "Users", field: "usersPermission" },
+  { id: 8, name: "EditAdmins", label: "Edit Admins", field: "editAdminsPermission" },
+  { id: 9, name: "Subdomains", label: "Subdomains", field: "subdomainsPermission" },
+  { id: 10, name: "ApiSettings", label: "API Settings", field: "apiSettingsPermission" },
 ];
