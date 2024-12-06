@@ -158,6 +158,7 @@ export const RoleCard: FunctionComponent<RoleCardProps> = ({ role, setRoles, set
             <span>Use as Template</span>
           </button>
         </div>
+
         {/* Delete Confirmation Modal */}
         {showConfirmModal && (
           <div className="modal-background">

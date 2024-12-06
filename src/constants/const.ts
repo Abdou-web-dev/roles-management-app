@@ -12,6 +12,12 @@ export const accessLevelMappingReverse: { [key in number]: "None" | "View" | "Ed
   2: "Edit",
 };
 
+export const accessLevelMappingReverseBinary: { [key in number]: "NO" | "YES" } = {
+  0: "NO",
+  1: "YES",
+  // 2: "Edit",
+};
+
 export const idToNameMap: Record<number, string> = {
   1: "Locks",
   2: "ActivateLocks",

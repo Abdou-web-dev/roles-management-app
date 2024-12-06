@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { AccessLevel, Permission } from "../interfaces/RoleInterface";
 
 interface PermissionToggleProps {
@@ -33,7 +33,8 @@ export const PermissionToggle: FunctionComponent<PermissionToggleProps> = ({
         onClick={() => handleClick(0)} // For "No"
         disabled={accessLevel === 0} // Disable if already set to "No"
         type="button"
-        className={`no__btn ${accessLevel === 0 ? "no__active-button-class" : "no__inactive-button-class"}`}
+        className={`no__btn 
+          ${accessLevel === 0 ? "no__active-button-class" : "no__inactive-button-class"}`}
       >
         <span>No</span>
       </button>

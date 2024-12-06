@@ -42,7 +42,6 @@ const PermissionSelector: FunctionComponent<PermissionSelectorProps> = ({
             selectedPermission === "None" ? "none__active-button-class" : "none__inactive-button-class"
           }`}
           onClick={() => handleClick("None")}
-          // style={{ backgroundColor: getColor("None") }}
         >
           <span>None</span>
         </button>

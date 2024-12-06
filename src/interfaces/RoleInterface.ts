@@ -1,4 +1,4 @@
-import { FormikErrors, FormikTouched } from "formik";
+import { FormikErrors, FormikState, FormikTouched } from "formik";
 
 // Enums
 export enum PermissionType {
@@ -18,10 +18,6 @@ export enum AccessLevel {
   Read = 1,
   Write = 2,
 }
-
-// export type PermissionTypeMap = {
-//   [key: string]: PermissionType;
-// };
 
 export interface Permission {
   id: PermissionType | string;
@@ -47,6 +43,17 @@ export type RoleFormik = {
   handleBlur: (e: React.FocusEvent<any>) => void;
   handleSubmit: (e?: React.FormEvent<HTMLFormElement>) => void;
   setFieldValue: (field: keyof InitialValues, value: any, shouldValidate?: boolean) => void;
+  resetForm: (
+    nextState?:
+      | Partial<
+          FormikState<{
+            roleName: string;
+            roleIcon: number;
+            permissions: Permission[];
+          }>
+        >
+      | undefined
+  ) => void;
 };
 
 export interface Role {

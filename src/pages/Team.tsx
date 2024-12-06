@@ -39,11 +39,6 @@ const Team = () => {
   const handleAddRoleClick = () => setIsCreatingRole(true);
   const handleBackClick = () => setIsCreatingRole(false);
 
-  // const addNewRole = (newRole: Role) => {
-  //   // Optimistic UI update: add the role immediately to the roles state
-  //   setRoles((prevRoles: Role[]) => [newRole, ...prevRoles]);
-  // };
-
   const addOrUpdateNewRole = (newRole: Role) => {
     // Optimistic UI update: add the role immediately to the roles state
     setRoles((prevRoles: Role[]) => {
@@ -52,21 +47,15 @@ const Team = () => {
         // Update existing role
         const updatedRoles = [...prevRoles];
         updatedRoles[existingRoleIndex] = newRole;
-        // console.log(updatedRoles, "updatedRoles");
         return updatedRoles;
       } else {
         // Add new role
         const newRoles = [newRole, ...prevRoles];
-        // console.log(newRoles, "newRoles");
 
         return newRoles;
       }
     });
   };
-
-  useEffect(() => {
-    if (roles) console.log(roles, "list of roles");
-  }, [roles]);
 
   if (loading)
     return (

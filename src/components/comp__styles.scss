@@ -228,6 +228,9 @@ li.role__card-container{
                    
                 }
                 .none__button{
+                    border-top-left-radius: 8px;
+                    border-bottom-left-radius: 8px;
+
                     &.none__active-button-class{
                         background: #33C173;
                         border-top-left-radius: 8px;
@@ -293,6 +296,7 @@ li.role__card-container{
 
                     &.yes__active-button-class{
                         background: #33C173;
+                        cursor: not-allowed;
                         span{
                             color: #FFFFFF;
                         }
@@ -311,6 +315,7 @@ li.role__card-container{
 
                     &.no__active-button-class{
                         background: #33C173;
+                        cursor: not-allowed;
                         span{
                             color: #FFFFFF;
                         }
@@ -389,21 +394,6 @@ li.role__card-container{
         }
     }
 }
-
-.spinner {
-    border-top-color: transparent;
-    border-radius: 50%;
-    border-width: 4px;
-    width: 64px;
-    height: 64px;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
 
   .modal-background {
     position: fixed;
