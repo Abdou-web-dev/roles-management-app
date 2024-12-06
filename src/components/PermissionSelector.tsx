@@ -5,12 +5,14 @@ interface PermissionSelectorProps {
   initialAccessLevel: string | AccessLevel | undefined; // Initial value for the permission (e.g., "None")
   onPermissionChange: (newPermission: any) => void;
   permissionType: PermissionType | string;
+  formLoading: boolean;
 }
 
 const PermissionSelector: FunctionComponent<PermissionSelectorProps> = ({
   initialAccessLevel,
   onPermissionChange,
   permissionType,
+  formLoading,
 }) => {
   // Local state for tracking selected permission
   const [selectedPermission, setSelectedPermission] = useState<string | AccessLevel | undefined>(initialAccessLevel);
@@ -28,29 +30,28 @@ const PermissionSelector: FunctionComponent<PermissionSelectorProps> = ({
     setSelectedPermission(accessLevelValue);
   };
 
-  // const getColor = (permission: string) => {
-  //   return selectedPermission === permission ? "#33C173" : "#ABAFB1"; // Green if selected, grey if not
-  // };
-
   return (
     <div className="flex flex-col justify-between  permission-selector-container">
       <div className="">
         <button
           // Warning: You submitted a Formik form using a button with an unspecified `type` attribute.  Most browsers default button elements to `type="submit"`. If this is not a submit button, please add `type="button"`.
           type="button"
+          disabled={formLoading}
           className={`none__button ${
             selectedPermission === "None" ? "none__active-button-class" : "none__inactive-button-class"
-          }`}
+          }
+           ${formLoading ? "none__inactive__form-loading-button" : ""}`}
           onClick={() => handleClick("None")}
-          // style={{ backgroundColor: getColor("None") }}
         >
           <span>None</span>
         </button>
         <button
+          disabled={formLoading}
           type="button"
           className={`view__button ${
             selectedPermission === "View" ? "view__active-button-class" : "view__inactive-button-class"
-          }`}
+          }
+           ${formLoading ? "view__inactive__form-loading-button" : ""}`}
           onClick={() => handleClick("View")}
         >
           <span>View</span>
@@ -59,8 +60,11 @@ const PermissionSelector: FunctionComponent<PermissionSelectorProps> = ({
           type="button"
           className={`edit__button ${
             selectedPermission === "Edit" ? "edit__active-button-class" : "edit__inactive-button-class"
-          }`}
+          }
+          ${formLoading ? "edit__inactive__form-loading-button" : ""}
+          `}
           onClick={() => handleClick("Edit")}
+          disabled={formLoading}
         >
           <span>Edit</span>
         </button>

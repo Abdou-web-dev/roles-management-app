@@ -2,8 +2,9 @@ import { FunctionComponent } from "react";
 
 interface IconProps {
   fillColor: string; // Accept fill color as prop
+  formLoading: boolean;
 }
-const AdminIcon: FunctionComponent<IconProps> = ({ fillColor }) => {
+const AdminIcon: FunctionComponent<IconProps> = ({ fillColor, formLoading }) => {
   return (
     <svg
       width="44"
@@ -16,7 +17,8 @@ const AdminIcon: FunctionComponent<IconProps> = ({ fillColor }) => {
         width="44"
         height="44"
         rx="22"
-        fill={fillColor} // green color #33C173
+        fill={formLoading ? "rgba(211, 211, 211, 0.35)" : fillColor}
+        // green color #33C173
         // grey color #ABAFB1
       />
       <mask
@@ -47,7 +49,7 @@ const AdminIcon: FunctionComponent<IconProps> = ({ fillColor }) => {
   );
 };
 
-const PersonelIcon: FunctionComponent<IconProps> = ({ fillColor }) => {
+const PersonelIcon: FunctionComponent<IconProps> = ({ fillColor, formLoading }) => {
   return (
     <svg
       width="44"
@@ -60,7 +62,7 @@ const PersonelIcon: FunctionComponent<IconProps> = ({ fillColor }) => {
         width="44"
         height="44"
         rx="22"
-        fill={fillColor}
+        fill={formLoading ? "rgba(211, 211, 211, 0.35)" : fillColor}
       />
       <mask
         id="mask0_2188_4675" // @ts-ignore
@@ -89,7 +91,7 @@ const PersonelIcon: FunctionComponent<IconProps> = ({ fillColor }) => {
   );
 };
 
-const ManagerIcon: FunctionComponent<IconProps> = ({ fillColor }) => {
+const ManagerIcon: FunctionComponent<IconProps> = ({ fillColor, formLoading }) => {
   return (
     <svg
       width="44"
@@ -102,7 +104,7 @@ const ManagerIcon: FunctionComponent<IconProps> = ({ fillColor }) => {
         width="44"
         height="44"
         rx="22"
-        fill={fillColor}
+        fill={formLoading ? "rgba(211, 211, 211, 0.35)" : fillColor}
       />
       <mask
         id="mask0_2188_4680"
@@ -136,7 +138,7 @@ const ManagerIcon: FunctionComponent<IconProps> = ({ fillColor }) => {
   );
 };
 
-const FinanceOfficer: FunctionComponent<IconProps> = ({ fillColor }) => {
+const FinanceOfficer: FunctionComponent<IconProps> = ({ fillColor, formLoading }) => {
   return (
     <svg
       width="44"
@@ -149,7 +151,7 @@ const FinanceOfficer: FunctionComponent<IconProps> = ({ fillColor }) => {
         width="44"
         height="44"
         rx="22"
-        fill={fillColor}
+        fill={formLoading ? "rgba(211, 211, 211, 0.35)" : fillColor}
       />
       <mask
         id="mask0_2188_4686"
@@ -179,7 +181,7 @@ const FinanceOfficer: FunctionComponent<IconProps> = ({ fillColor }) => {
   );
 };
 
-const ItSupport: FunctionComponent<IconProps> = ({ fillColor }) => {
+const ItSupport: FunctionComponent<IconProps> = ({ fillColor, formLoading }) => {
   return (
     <svg
       width="44"
@@ -192,7 +194,7 @@ const ItSupport: FunctionComponent<IconProps> = ({ fillColor }) => {
         width="44"
         height="44"
         rx="22"
-        fill={fillColor}
+        fill={formLoading ? "rgba(211, 211, 211, 0.35)" : fillColor}
       />
       <mask
         id="mask0_2188_4691"

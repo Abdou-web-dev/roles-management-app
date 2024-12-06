@@ -154,10 +154,14 @@ export const RoleCard: FunctionComponent<RoleCardProps> = ({ role, setRoles, set
             </div>
             <p>Users Assigned</p>
           </div>
-          <button className="use__as transform transition-transform duration-300 hover:scale-110 ">
+          <button
+            // onClick={useAsTemplateHandler}
+            className="use__as transform transition-transform duration-300 hover:scale-110 "
+          >
             <span>Use as Template</span>
           </button>
         </div>
+
         {/* Delete Confirmation Modal */}
         {showConfirmModal && (
           <div className="modal-background">

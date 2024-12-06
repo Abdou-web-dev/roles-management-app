@@ -4,9 +4,10 @@ import { AdminIcon, PersonelIcon, ManagerIcon, FinanceOfficer, ItSupport } from 
 interface RoleIconsProps {
   selectedIcon: number;
   setSelectedIcon: (iconIndex: number) => void;
+  formLoading: boolean;
 }
 
-const RoleIcons: FunctionComponent<RoleIconsProps> = ({ selectedIcon, setSelectedIcon }) => {
+const RoleIcons: FunctionComponent<RoleIconsProps> = ({ selectedIcon, setSelectedIcon, formLoading }) => {
   const icons = [
     { id: 0, Icon: AdminIcon },
     { id: 1, Icon: PersonelIcon },
@@ -16,23 +17,33 @@ const RoleIcons: FunctionComponent<RoleIconsProps> = ({ selectedIcon, setSelecte
   ];
 
   return (
-    <div className="role-icons-inner flex gap-0">
-      {icons?.map((icon) => {
-        const fillColor = selectedIcon === icon.id ? "#33C173" : "#ABAFB1"; // Green if selected, grey if not
+    <>
+      <label
+        htmlFor="roleIcon"
+        className=""
+      >
+        Select Role Icon
+      </label>
+      <div className="role-icons-inner flex gap-0">
+        {icons?.map((icon) => {
+          const fillColor = selectedIcon === icon.id ? "#33C173" : "#ABAFB1"; // Green if selected, grey if not
 
-        return (
-          <div
-            key={icon.id}
-            onClick={() => setSelectedIcon(icon.id)}
-            className={`single__icon cursor-pointer p-2  ${
-              selectedIcon === icon.id ? "border-[#33C173]" : "border-[#ABAFB1]"
-            }`}
-          >
-            <icon.Icon fillColor={fillColor} />
-          </div>
-        );
-      })}
-    </div>
+          return (
+            <div
+              // @ts-ignore
+              style={{ cursor: formLoading ? "not-allowed" : "", pointerEvents: formLoading ? "none" : "" }}
+              key={icon.id}
+              onClick={() => setSelectedIcon(icon.id)}
+              className={`single__icon cursor-pointer p-2  ${
+                selectedIcon === icon.id ? "border-[#33C173]" : "border-[#ABAFB1]"
+              }`}
+            >
+              <icon.Icon {...{ formLoading, fillColor }} />
+            </div>
+          );
+        })}
+      </div>
+    </>
   );
 };
 

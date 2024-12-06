@@ -8,18 +8,21 @@ import "./pages__styles.scss";
 import RoleForm from "../components/RoleForm";
 import back from "../assets/back.svg";
 import AddCustomRoleButton from "../components/AddCustomRoleButton";
+import { useLoading } from "../hooks/useLoading";
 
 const Team = () => {
   const [roles, setRoles] = useState<Role[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isCreatingRole, setIsCreatingRole] = useState(false);
   const [roleToEdit, setRoleToEdit] = useState<Role | null>(null);
+  const [templateRole, setTemplateRole] = useState<Role | null>(null);
+
+  const { hideLoader, loading, showLoader } = useLoading();
 
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        setLoading(true);
+        showLoader();
         const response = await getRoles(CUSTOM_IDENTIFIER);
 
         setRoles(response.data);
@@ -28,7 +31,7 @@ const Team = () => {
         setError("Failed to fetch roles.");
       } finally {
         setTimeout(() => {
-          setLoading(false);
+          hideLoader();
         }, 1050);
       }
     };
@@ -39,34 +42,23 @@ const Team = () => {
   const handleAddRoleClick = () => setIsCreatingRole(true);
   const handleBackClick = () => setIsCreatingRole(false);
 
-  // const addNewRole = (newRole: Role) => {
-  //   // Optimistic UI update: add the role immediately to the roles state
-  //   setRoles((prevRoles: Role[]) => [newRole, ...prevRoles]);
-  // };
-
   const addOrUpdateNewRole = (newRole: Role) => {
     // Optimistic UI update: add the role immediately to the roles state
     setRoles((prevRoles: Role[]) => {
       const existingRoleIndex = prevRoles?.findIndex((role) => role?.id === newRole?.id);
       if (existingRoleIndex !== -1) {
         // Update existing role
-        const updatedRoles = [...prevRoles];
+        const updatedRoles: Role[] = [...prevRoles];
         updatedRoles[existingRoleIndex] = newRole;
-        // console.log(updatedRoles, "updatedRoles");
         return updatedRoles;
       } else {
         // Add new role
-        const newRoles = [newRole, ...prevRoles];
-        // console.log(newRoles, "newRoles");
+        const newRoles: Role[] = [newRole, ...prevRoles];
 
         return newRoles;
       }
     });
   };
-
-  useEffect(() => {
-    if (roles) console.log(roles, "list of roles");
-  }, [roles]);
 
   if (loading)
     return (
@@ -117,7 +109,7 @@ const Team = () => {
             <h3>Configure general information and permissions below. Don’t forget to save the Custom Role.</h3>
             <RoleForm
               {...{ setIsCreatingRole, roleToEdit }}
-              addOrUpdateNewRole={addOrUpdateNewRole}
+              processRole={addOrUpdateNewRole}
             />
           </div>
         )}

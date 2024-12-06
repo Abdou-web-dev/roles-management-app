@@ -19,6 +19,13 @@
     text-align: center;
 }
 
+@mixin btn_styles__form-is-loading{
+    background: rgba(211, 211, 211, 0.2);
+    span{
+        color: #ABAFB1;
+    }
+}
+
 li.role__card-container{
     border: 1px solid #33C173;
     border-radius: 10px;
@@ -228,6 +235,9 @@ li.role__card-container{
                    
                 }
                 .none__button{
+                    border-top-left-radius: 8px;
+                    border-bottom-left-radius: 8px;
+
                     &.none__active-button-class{
                         background: #33C173;
                         border-top-left-radius: 8px;
@@ -238,11 +248,15 @@ li.role__card-container{
                         }
                     }
                     &.none__inactive-button-class{
-                        background: #EEF3F5 !important;
+                        background: #EEF3F5 ;
                         span{
                             color: #ABAFB1;
                         }
                     }
+                    &.none__inactive__form-loading-button{
+                        @include btn_styles__form-is-loading();
+                    }
+                   
                 }
                 .view__button{
                     &.view__active-button-class{
@@ -252,10 +266,13 @@ li.role__card-container{
                         }
                     }
                     &.view__inactive-button-class{
-                        background: #EEF3F5 !important;
+                        background: #EEF3F5 ;
                         span{
                             color: #ABAFB1;
                         }
+                    }
+                       &.view__inactive__form-loading-button{
+                        @include btn_styles__form-is-loading();
                     }
                 }
                 .edit__button{
@@ -269,10 +286,13 @@ li.role__card-container{
                         }
                     }
                     &.edit__inactive-button-class{
-                        background: #EEF3F5 !important;
+                        background: #EEF3F5 ;
                         span{
                             color: #ABAFB1;
                         }
+                    }
+                     &.edit__inactive__form-loading-button{
+                        @include btn_styles__form-is-loading();
                     }
                 }
             }
@@ -293,15 +313,19 @@ li.role__card-container{
 
                     &.yes__active-button-class{
                         background: #33C173;
+                        cursor: not-allowed;
                         span{
                             color: #FFFFFF;
                         }
                     }
                     &.yes__inactive-button-class{
-                        background: #EEF3F5 !important;
+                        background: #EEF3F5 ;
                         span{
                             color: #ABAFB1;
                         }
+                    }
+                    &.yes__form-loading-button{
+                        @include btn_styles__form-is-loading();
                     }
                 }
 
@@ -311,15 +335,19 @@ li.role__card-container{
 
                     &.no__active-button-class{
                         background: #33C173;
+                        cursor: not-allowed;
                         span{
                             color: #FFFFFF;
                         }
                     }
                     &.no__inactive-button-class{
-                        background: #EEF3F5 !important;
+                        background: #EEF3F5 ;
                         span{
                             color: #ABAFB1;
                         }
+                    }
+                    &.no__form-loading-button{
+                        @include btn_styles__form-is-loading();
                     }
                 }
             }
@@ -389,21 +417,6 @@ li.role__card-container{
         }
     }
 }
-
-.spinner {
-    border-top-color: transparent;
-    border-radius: 50%;
-    border-width: 4px;
-    width: 64px;
-    height: 64px;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
 
   .modal-background {
     position: fixed;

@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { AccessLevel, Permission } from "../interfaces/RoleInterface";
 
 interface PermissionToggleProps {
@@ -6,10 +6,12 @@ interface PermissionToggleProps {
   accessLevel: number | string;
   onChange: (updatedPermission: Permission) => void;
   initialAccessLevel: string | AccessLevel | undefined; // Initial value for the permission (e.g., "None")
+  formLoading: boolean;
 }
 
 export const PermissionToggle: FunctionComponent<PermissionToggleProps> = ({
   permission,
+  formLoading,
   accessLevel,
   onChange,
   initialAccessLevel,
@@ -33,7 +35,9 @@ export const PermissionToggle: FunctionComponent<PermissionToggleProps> = ({
         onClick={() => handleClick(0)} // For "No"
         disabled={accessLevel === 0} // Disable if already set to "No"
         type="button"
-        className={`no__btn ${accessLevel === 0 ? "no__active-button-class" : "no__inactive-button-class"}`}
+        className={`no__btn 
+          ${accessLevel === 0 ? "no__active-button-class" : "no__inactive-button-class"}
+          ${formLoading ? "no__form-loading-button" : ""}`}
       >
         <span>No</span>
       </button>
@@ -42,7 +46,9 @@ export const PermissionToggle: FunctionComponent<PermissionToggleProps> = ({
         onClick={() => handleClick(1)} // For "Yes"
         disabled={accessLevel === 1} // Disable if already set to "Yes"
         type="button"
-        className={`yes__btn ${accessLevel === 1 ? "yes__active-button-class" : "yes__inactive-button-class"}`}
+        className={`yes__btn
+           ${accessLevel === 1 ? "yes__active-button-class" : "yes__inactive-button-class"}
+          ${formLoading ? "yes__form-loading-button" : ""}`}
       >
         <span>Yes</span>
       </button>
