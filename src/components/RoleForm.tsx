@@ -1,8 +1,8 @@
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent } from "react";
 import RoleIcons from "./RoleIcons";
 import { Permission, Role, RoleInitialValues, updateRoleDataPayload } from "../interfaces/RoleInterface";
 import { NiceSpinner } from "./NiceSpinner";
-import { getInitialPermissionsForRole, transformPermissions } from "../utils/role/roleUtils";
+import { getInitialPermissionsForRole, transformPermissions, validateRoleName } from "../utils/role/roleUtils";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import { CUSTOM_IDENTIFIER } from "../constants/const";
@@ -12,49 +12,54 @@ import RoleName from "./RoleName";
 import Permissions from "./Permissions";
 import ControlButtons from "./ControlButtons";
 import { useLoading } from "../hooks/useLoading";
-import { roleSchema } from "../validations/roleValidation";
 
 const RoleForm: FunctionComponent<{
   roleToEdit?: Role | null;
+  templateRole: Role | null;
   setIsCreatingRole: React.Dispatch<React.SetStateAction<boolean>>;
   processRole: (newRole: Role) => void;
-}> = ({ setIsCreatingRole, processRole, roleToEdit }) => {
+  existingRoles: Role[];
+}> = ({ setIsCreatingRole, processRole, roleToEdit, templateRole, existingRoles }) => {
+  const currentRole = roleToEdit ? roleToEdit : templateRole ? templateRole : null;
   const notify = (message: string, type: "success" | "error" | "info") => {
     type === "success" ? toast.success(message) : type === "info" ? toast.info(message) : toast.error(message);
   };
 
   const { hideLoader, loading: formLoading, showLoader } = useLoading();
 
-  const initialPermissions = getInitialPermissionsForRole(roleToEdit) as Permission[];
+  const initialPermissions = getInitialPermissionsForRole(currentRole) as Permission[];
 
   const initialValues: RoleInitialValues = {
-    roleName: roleToEdit?.name || "",
-    roleIcon: roleToEdit?.roleIcon || 0,
-    permissions: initialPermissions,
+    roleName: currentRole?.name || "",
+    roleIcon: currentRole?.roleIcon || 0,
+    permissions: initialPermissions || [],
   };
 
   const roleFormik = useFormik({
     initialValues: initialValues,
-    validationSchema: roleSchema,
-    enableReinitialize: true, // Ensures form re-initializes when `roleToEdit` changes
+    // validationSchema: roleSchema,
+    enableReinitialize: true,
     validateOnChange: false, // Disable validation on field change
     validateOnBlur: false, // Disable validation on blur
     validate: (values) => {
       const errors: { roleName?: string } = {};
+      // The reason for passing null as currentRole when creating a role based on another is to avoid the validation of the role name against the template role itself, ensuring the system doesn’t mistakenly treat the template as a duplicate when simply creating a new role based on it.
+      const currentRole = templateRole ? null : roleToEdit;
+      const roleNameError = validateRoleName(values.roleName, existingRoles, currentRole, notify);
 
-      // Early check for empty roleName before Yup validation
-      if (!values.roleName.trim()) {
-        errors.roleName = "Role name is required"; // Set custom error message
-        notify("You must enter a name for this role!", "error"); // Show toast
+      if (roleNameError) {
+        errors.roleName = roleNameError;
       }
 
       return errors;
     },
+
     onSubmit: async (values, { setSubmitting, resetForm }) => {
+      // the onSubmit will be called only if the errors object is empty and the rules defined inside the manual validate method are respected  !
       // Check if the form values are unchanged , upon editing an exisitng role
       const noChanges: boolean = JSON.stringify(values) === JSON.stringify(roleFormik.initialValues);
 
-      if (noChanges) {
+      if (noChanges && roleToEdit) {
         notify("No changes detected. Please modify fields before saving.", "error");
         setSubmitting(false);
         return; // Exit early
@@ -68,13 +73,13 @@ const RoleForm: FunctionComponent<{
           permissions: transformedPermissions,
           ...(roleToEdit && { id: roleToEdit?.id }), // Include `id` only if editing
         };
-        const apiCall = roleToEdit ? updateRole : addRole; // Determine API method
+        const apiCall = roleToEdit ? updateRole : templateRole ? addRole : addRole; // Determine API method
         const roleResponse: any | Role = await apiCall(CUSTOM_IDENTIFIER, payload as updateRoleDataPayload);
 
         if (roleResponse?.data) {
           const finalRole = roleResponse?.data; //finalRole holds either the response of the newly created role or the updated role
           processRole(finalRole as Role); // Optimistic UI update
-          notify(`Role ${roleToEdit ? "updated" : "created"} successfully!`, "success");
+          notify(`Role ${roleToEdit ? "updated" : templateRole ? "created" : "created"} successfully!`, "success");
         } else {
           console.error("API error:", roleResponse?.error || "Unknown error");
           notify("Something went wrong. Please try again!", "error");
@@ -97,7 +102,6 @@ const RoleForm: FunctionComponent<{
   const onPermissionChange = (updatedPermission: Permission) => {
     // Update the permission in Formik's state using setFieldValue
     const permissionIndex = roleFormik.values.permissions.findIndex(
-      // @ts-ignore
       (permission: Permission) => permission.id === updatedPermission.id
     );
     if (permissionIndex >= 0) {
@@ -122,7 +126,7 @@ const RoleForm: FunctionComponent<{
         </div>
 
         <h2>Permissions</h2>
-        <Permissions {...{ formLoading, onPermissionChange, roleFormik, roleToEdit }} />
+        <Permissions {...{ formLoading, onPermissionChange, roleFormik, currentRole }} />
 
         <ControlButtons {...{ formLoading, roleFormik, setIsCreatingRole }} />
       </form>

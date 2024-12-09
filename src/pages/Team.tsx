@@ -42,7 +42,7 @@ const Team = () => {
   const handleAddRoleClick = () => setIsCreatingRole(true);
   const handleBackClick = () => setIsCreatingRole(false);
 
-  const addOrUpdateNewRole = (newRole: Role) => {
+  const handleProcessRole = (newRole: Role) => {
     // Optimistic UI update: add the role immediately to the roles state
     setRoles((prevRoles: Role[]) => {
       const existingRoleIndex = prevRoles?.findIndex((role) => role?.id === newRole?.id);
@@ -80,7 +80,7 @@ const Team = () => {
               return (
                 <React.Fragment key={index + role.id}>
                   <RoleCard
-                    {...{ setRoles, setIsCreatingRole, setRoleToEdit }}
+                    {...{ setRoles, setIsCreatingRole, setRoleToEdit, setTemplateRole }}
                     role={role}
                   />
                 </React.Fragment>
@@ -88,13 +88,19 @@ const Team = () => {
             })}
 
             {/* Add the button after the roles are rendered */}
-            <AddCustomRoleButton {...{ setRoleToEdit, handleAddRoleClick }} />
+            <AddCustomRoleButton {...{ setRoleToEdit, handleAddRoleClick, setTemplateRole }} />
           </ul>
         ) : (
           // Role form View
           <div className="create-custom-role-page pr-2">
             <div className="btn_and_title">
-              <h2 className="font-bold mb-4">{roleToEdit ? "Edit Custom Role" : "Create Custom Role"}</h2>
+              <h2 className="font-bold mb-4">
+                {roleToEdit
+                  ? "Edit Custom Role"
+                  : templateRole
+                  ? "Create Custom Role based off another role :"
+                  : "Create Custom Role"}
+              </h2>
               <button
                 className="back__button"
                 onClick={handleBackClick}
@@ -108,8 +114,8 @@ const Team = () => {
             </div>
             <h3>Configure general information and permissions below. Don’t forget to save the Custom Role.</h3>
             <RoleForm
-              {...{ setIsCreatingRole, roleToEdit }}
-              processRole={addOrUpdateNewRole}
+              {...{ setIsCreatingRole, roleToEdit, templateRole, existingRoles: roles }}
+              processRole={handleProcessRole}
             />
           </div>
         )}

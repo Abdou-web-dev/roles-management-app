@@ -19,9 +19,16 @@ interface RoleCardProps {
   setRoles: React.Dispatch<React.SetStateAction<Role[]>>;
   setIsCreatingRole: React.Dispatch<React.SetStateAction<boolean>>;
   setRoleToEdit: React.Dispatch<React.SetStateAction<Role | null>>;
+  setTemplateRole: React.Dispatch<React.SetStateAction<Role | null>>;
 }
 
-export const RoleCard: FunctionComponent<RoleCardProps> = ({ role, setRoles, setIsCreatingRole, setRoleToEdit }) => {
+export const RoleCard: FunctionComponent<RoleCardProps> = ({
+  role,
+  setRoles,
+  setIsCreatingRole,
+  setRoleToEdit,
+  setTemplateRole,
+}) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const deleteError = () =>
     toast.error("Failed to delete role. Please try again.", {
@@ -30,8 +37,7 @@ export const RoleCard: FunctionComponent<RoleCardProps> = ({ role, setRoles, set
 
   const handleDeleteRole = async () => {
     try {
-      // Optimistically remove the role
-      // remove the role from the UI
+      // Optimistically remove the role from the UI, even before the backend responds
 
       setRoles((prevRoles: Role[]) => prevRoles.filter((r: Role) => r.id !== role.id));
       const deleteResponse = await deleteRole(CUSTOM_IDENTIFIER, role.id); // Call deleteRole with the API
@@ -99,6 +105,13 @@ export const RoleCard: FunctionComponent<RoleCardProps> = ({ role, setRoles, set
   const editRole = (): void => {
     setIsCreatingRole(true);
     setRoleToEdit(role); // Pass the current role to the parent state
+    setTemplateRole(null);
+  };
+
+  const useAsTemplateHandler = (): void => {
+    setIsCreatingRole(true); // Switch to the role creation view
+    setTemplateRole(role); // Pass the current role to the parent state
+    setRoleToEdit(null);
   };
 
   if (role)
@@ -155,7 +168,7 @@ export const RoleCard: FunctionComponent<RoleCardProps> = ({ role, setRoles, set
             <p>Users Assigned</p>
           </div>
           <button
-            // onClick={useAsTemplateHandler}
+            onClick={useAsTemplateHandler}
             className="use__as transform transition-transform duration-300 hover:scale-110 "
           >
             <span>Use as Template</span>

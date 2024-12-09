@@ -1,5 +1,4 @@
-import { FunctionComponent, useEffect, useState } from "react";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useState } from "react";
 import { AccessLevel, Permission } from "../interfaces/RoleInterface";
 
 interface PermissionToggleProps {

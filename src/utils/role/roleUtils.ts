@@ -7,8 +7,8 @@ import {
 } from "../../constants/const";
 import { Permission, Role } from "../../interfaces/RoleInterface";
 
-export const getInitialPermissionsForRole = (roleToEdit?: Role | null | undefined) => {
-  const rolePermissions = roleToEdit?.permissions?.map(({ id, accessLevel }) => ({
+export const getInitialPermissionsForRole = (role: Role | null | undefined) => {
+  const rolePermissions = role?.permissions?.map(({ id, accessLevel }) => ({
     // @ts-ignore
     id: idToNameMap[id] || `Unknown-${id}`,
     accessLevel:
@@ -46,3 +46,34 @@ export const transformPermissions = (permissions: Permission[]) => {
         : accessLevelMapping[permission.accessLevel as "None" | "View" | "Edit"], // Convert access level to backend-compatible format
   }));
 };
+
+export function validateRoleName(
+  roleName: string,
+  existingRoles: Role[],
+  currentRole: Role | null | undefined,
+  notify: (message: string, type: "success" | "error" | "info") => void
+): string | undefined {
+  // Check for empty roleName
+  if (!roleName.trim()) {
+    notify("You must enter a name for this role!", "error");
+    return "Role name is required";
+  }
+
+  // Check for minimum length
+  if (roleName.trim().length < 3) {
+    notify("Role name must be at least 3 characters long", "error");
+    return "Role name must be at least 3 characters long";
+  }
+
+  // Check for uniqueness
+  const isDuplicate = existingRoles?.some((role: Role) => {
+    return role.name.toLowerCase() === roleName.trim().toLowerCase() && role.id !== currentRole?.id;
+  });
+
+  if (isDuplicate) {
+    notify("A role with this name already exists!", "error");
+    return "Role name must be unique";
+  }
+
+  return undefined; // No errors
+}

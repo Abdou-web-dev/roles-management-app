@@ -5,7 +5,7 @@ import { PermissionToggle } from "./PermissionToggle";
 import PermissionSelector from "./PermissionSelector";
 
 interface PermissionsProps {
-  roleToEdit: Role | null | undefined;
+  currentRole: Role | null | undefined;
   roleFormik: RoleFormik;
   onPermissionChange: (updatedPermission: Permission) => void;
   formLoading: boolean;
@@ -13,7 +13,7 @@ interface PermissionsProps {
 
 const Permissions: FunctionComponent<PermissionsProps> = ({
   formLoading,
-  roleToEdit,
+  currentRole,
   roleFormik,
   onPermissionChange,
 }) => {
@@ -23,7 +23,7 @@ const Permissions: FunctionComponent<PermissionsProps> = ({
         const isBinaryPermission = name === "EditAdmins" || name === "TransferFacilities";
         const permission = roleFormik.values.permissions.find((perm: Permission) => perm.id === name);
 
-        const roleToEditPermission = roleToEdit?.permissions?.find((perm: Permission) => {
+        const roleToEditPermission = currentRole?.permissions?.find((perm: Permission) => {
           // Check if name corresponds to a key in PermissionType and compare it with the perm.id
           const permissionTypeId = PermissionType[name as keyof typeof PermissionType]; // Get the enum value corresponding to the name
           return Number(perm?.id) === Number(permissionTypeId); // Compare the permission id correctly
@@ -60,7 +60,7 @@ const Permissions: FunctionComponent<PermissionsProps> = ({
                   key={`selector-${name}`}
                   onPermissionChange={onPermissionChange}
                   initialAccessLevel={
-                    roleToEdit
+                    currentRole
                       ? (oldPermissionAccessLevel as string) || "None"
                       : roleFormik.values.permissions.find((permission: Permission) => permission.id === name)
                           ?.accessLevel || "None"

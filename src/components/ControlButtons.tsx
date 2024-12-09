@@ -11,8 +11,9 @@ const ControlButtons: FunctionComponent<ControlButtonsProps> = ({ roleFormik, se
   return (
     <div className="role-control-buttons">
       <button
+        disabled={formLoading}
         type="button"
-        className="cancel__btn"
+        className={`cancel__btn ${formLoading ? "opacity-50 cursor-not-allowed" : ""}`}
         onClick={() => {
           roleFormik.resetForm();
           setIsCreatingRole(false);

@@ -5,13 +5,19 @@ import { Role } from "../interfaces/RoleInterface";
 interface AddCustomRoleButtonProps {
   handleAddRoleClick: () => void;
   setRoleToEdit: React.Dispatch<React.SetStateAction<Role | null>>;
+  setTemplateRole: React.Dispatch<React.SetStateAction<Role | null>>;
 }
 
-const AddCustomRoleButton: FunctionComponent<AddCustomRoleButtonProps> = ({ handleAddRoleClick, setRoleToEdit }) => {
+const AddCustomRoleButton: FunctionComponent<AddCustomRoleButtonProps> = ({
+  handleAddRoleClick,
+  setRoleToEdit,
+  setTemplateRole,
+}) => {
   return (
     <button
       onClick={() => {
         setRoleToEdit(null);
+        setTemplateRole(null); // No template by default
         handleAddRoleClick();
       }}
       className="add__custom_role_button col-span-1 sm:col-span-1 md:col-span-1 lg:col-span-1 justify-self-start border rounded-lg p-4 
