@@ -27,6 +27,16 @@ const RoleIcons: FunctionComponent<RoleIconsProps> = ({ selectedIcon, setSelecte
       <div className="role-icons-inner flex gap-0">
         {icons?.map((icon) => {
           const fillColor = selectedIcon === icon.id ? "#33C173" : "#ABAFB1"; // Green if selected, grey if not
+    <>
+      <label
+        htmlFor="roleIcon"
+        className=""
+      >
+        Select Role Icon
+      </label>
+      <div className="role-icons-inner flex gap-0">
+        {icons?.map((icon) => {
+          const fillColor = selectedIcon === icon.id ? "#33C173" : "#ABAFB1"; // Green if selected, grey if not
 
           return (
             <div
