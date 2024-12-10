@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { Permission, Role } from "../interfaces/RoleInterface";
 import "./comp__styles.scss";
 import userAssignIcon from "../assets/userAssignIcon.svg";
@@ -38,15 +38,15 @@ export const RoleCard: FunctionComponent<RoleCardProps> = ({
   const handleDeleteRole = async () => {
     try {
       // Optimistically remove the role from the UI, even before the backend responds
-
       setRoles((prevRoles: Role[]) => prevRoles.filter((r: Role) => r.id !== role.id));
+
       const deleteResponse = await deleteRole(CUSTOM_IDENTIFIER, role.id); // Call deleteRole with the API
 
       if (deleteResponse.data === "Role deleted successfully." && deleteResponse.status === 201) {
         toast.info("Role deleted successfully.", {
           position: "top-right",
         });
-        setShowConfirmModal(false); // Close the modal upon successful delete
+        setShowConfirmModal(false); // Close the modal upon successful deletion
       }
     } catch (error) {
       console.error("Error deleting role:", error);
@@ -77,32 +77,18 @@ export const RoleCard: FunctionComponent<RoleCardProps> = ({
     };
   }, [setShowConfirmModal]);
 
-  const setRoleIcon = () => {
-    let icon: string = "";
-    if (role)
-      switch (role?.roleIcon) {
-        case 0:
-          icon = admin;
-          break;
-        case 1:
-          icon = personel;
-          break;
-        case 2:
-          icon = manager;
-          break;
-        case 3:
-          icon = bag;
-          break;
-        case 4:
-          icon = call_center__agent;
-          break;
-        default:
-          break;
-      }
-    return icon;
+  const roleIcons: { [key: string]: string } = {
+    0: admin,
+    1: personel,
+    2: manager,
+    3: bag,
+    4: call_center__agent,
   };
+  const genericIcon = bag;
 
-  const editRole = (): void => {
+  const roleIconPath: string = useMemo(() => roleIcons[String(role?.roleIcon)] || genericIcon || "", [role]);
+
+  const editRoleHandler = (): void => {
     setIsCreatingRole(true);
     setRoleToEdit(role); // Pass the current role to the parent state
     setTemplateRole(null);
@@ -114,18 +100,19 @@ export const RoleCard: FunctionComponent<RoleCardProps> = ({
     setRoleToEdit(null);
   };
 
+  const defaultRoles = ["Admin", "Personel"];
+  const isAdminOrPersonel: boolean = defaultRoles.includes(role?.name ?? "");
+
   if (role)
     return (
       <li className="role__card-container">
         <div className="role__header__icons">
-          <h3 className="role-header">
-            {role?.name === "Admin" || role?.name === "Personel" ? `Default Role` : `Custom Role`}
-          </h3>
+          <h3 className="role-header">{isAdminOrPersonel ? `Default Role` : `Custom Role`}</h3>
 
-          {role?.name === "Admin" || role?.name === "Personel" ? null : (
+          {isAdminOrPersonel ? null : (
             <div className="control__icons flex">
               <button
-                onClick={editRole}
+                onClick={editRoleHandler}
                 className="edit-icon transform transition-transform duration-300 hover:scale-110"
               >
                 <img
@@ -150,7 +137,7 @@ export const RoleCard: FunctionComponent<RoleCardProps> = ({
         <div className="role-category flex flex-col justify-center items-center">
           <img
             className="role__icon"
-            src={setRoleIcon()}
+            src={roleIconPath}
             alt=""
             width={`80px`}
             height={`80px`}
