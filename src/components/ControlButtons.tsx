@@ -18,9 +18,6 @@ const ControlButtons: FunctionComponent<ControlButtonsProps> = ({
   setTemplateRole,
   roleToEdit,
 }) => {
-  useEffect(() => {
-    console.log(roleToEdit, "roleToEdit is from ControlButtons ");
-  }, [roleToEdit]);
   return (
     <div className="role-control-buttons">
       <button
