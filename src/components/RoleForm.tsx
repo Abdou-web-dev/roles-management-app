@@ -130,9 +130,7 @@ const RoleForm: FunctionComponent<{
         <h2>Permissions</h2>
         <Permissions {...{ formLoading, onPermissionChange, roleFormik, currentRole }} />
 
-        <ControlButtons
-          {...{ formLoading, roleFormik, setIsCreatingRole, setRoleToEdit, setTemplateRole, roleToEdit }}
-        />
+        <ControlButtons {...{ formLoading, roleFormik, setIsCreatingRole, setRoleToEdit, setTemplateRole }} />
       </form>
       {/* Spinner */}
       {formLoading && (

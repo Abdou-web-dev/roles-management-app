@@ -7,7 +7,6 @@ interface ControlButtonsProps {
   setIsCreatingRole: React.Dispatch<React.SetStateAction<boolean>>;
   setRoleToEdit: React.Dispatch<React.SetStateAction<Role | null>>;
   setTemplateRole: React.Dispatch<React.SetStateAction<Role | null>>;
-  roleToEdit: Role | null | undefined;
 }
 
 const ControlButtons: FunctionComponent<ControlButtonsProps> = ({
@@ -16,7 +15,6 @@ const ControlButtons: FunctionComponent<ControlButtonsProps> = ({
   formLoading,
   setRoleToEdit,
   setTemplateRole,
-  roleToEdit,
 }) => {
   return (
     <div className="role-control-buttons">
