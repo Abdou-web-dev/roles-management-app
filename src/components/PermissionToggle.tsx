@@ -16,7 +16,7 @@ export const PermissionToggle: FunctionComponent<PermissionToggleProps> = ({
   onChange,
   initialAccessLevel,
 }) => {
-  const [selectedPermission, setSelectedPermission] = useState<string | AccessLevel | undefined>(initialAccessLevel);
+  const [, setSelectedPermission] = useState<string | AccessLevel | undefined>(initialAccessLevel);
 
   const handleClick = (accessLevelValue: AccessLevel | string) => {
     const permissionObj: Permission = {

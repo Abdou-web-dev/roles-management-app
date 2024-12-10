@@ -1,5 +1,5 @@
 import { FunctionComponent, useEffect, useMemo, useState } from "react";
-import { Permission, Role } from "../interfaces/RoleInterface";
+import { Role } from "../interfaces/RoleInterface";
 import "./comp__styles.scss";
 import userAssignIcon from "../assets/userAssignIcon.svg";
 import { formatNumberThousands } from "../utils/helpers";
