@@ -76,16 +76,22 @@ const Team = () => {
         {!isCreatingRole ? (
           // Roles tile list View
           <ul className="roles-grid-ul grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {roles?.map((role: Role, index: number) => {
-              return (
-                <React.Fragment key={index + role.id}>
-                  <RoleCard
-                    {...{ setRoles, setIsCreatingRole, setRoleToEdit, setTemplateRole }}
-                    role={role}
-                  />
-                </React.Fragment>
-              );
-            })}
+            {roles?.length ? (
+              <>
+                {roles?.map((role: Role) => {
+                  return (
+                    <React.Fragment key={role.id}>
+                      <RoleCard
+                        {...{ setRoles, setIsCreatingRole, setRoleToEdit, setTemplateRole }}
+                        role={role}
+                      />
+                    </React.Fragment>
+                  );
+                })}
+              </>
+            ) : (
+              <div>There are no roles !</div>
+            )}
 
             {/* Add the button after the roles are rendered */}
             <AddCustomRoleButton {...{ setRoleToEdit, handleAddRoleClick, setTemplateRole }} />

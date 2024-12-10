@@ -103,85 +103,88 @@ export const RoleCard: FunctionComponent<RoleCardProps> = ({
   const defaultRoles = ["Admin", "Personel"];
   const isAdminOrPersonel: boolean = defaultRoles.includes(role?.name ?? "");
 
-  if (role)
-    return (
-      <li className="role__card-container">
-        <div className="role__header__icons">
-          <h3 className="role-header">{isAdminOrPersonel ? `Default Role` : `Custom Role`}</h3>
+  if (!role) {
+    return null;
+  }
 
-          {isAdminOrPersonel ? null : (
-            <div className="control__icons flex">
-              <button
-                onClick={editRoleHandler}
-                className="edit-icon transform transition-transform duration-300 hover:scale-110"
-              >
-                <img
-                  src={editIcon}
-                  alt="Edit"
-                  width="20px"
-                />
-              </button>
-              <button
-                onClick={() => setShowConfirmModal(true)} // Open confirmation modal
-                className="delete-icon transform transition-transform duration-300 hover:scale-110 "
-              >
-                <img
-                  src={deleteIcon}
-                  alt="Delete"
-                  width="20px"
-                />
-              </button>
-            </div>
-          )}
-        </div>
-        <div className="role-category flex flex-col justify-center items-center">
-          <img
-            className="role__icon"
-            src={roleIconPath}
-            alt=""
-            width={`80px`}
-            height={`80px`}
-          />
-          <span className="admin__text">{role.name}</span>
-          <div className="users_wrapper">
-            <div className="flex flex-row justify-center items-center users_wrapper-inner">
+  return (
+    <li className="role__card-container">
+      <div className="role__header__icons">
+        <h3 className="role-header">{isAdminOrPersonel ? `Default Role` : `Custom Role`}</h3>
+
+        {isAdminOrPersonel ? null : (
+          <div className="control__icons flex">
+            <button
+              onClick={editRoleHandler}
+              className="edit-icon transform transition-transform duration-300 hover:scale-110"
+            >
               <img
-                src={userAssignIcon}
-                alt=""
-                width={`20px`}
+                src={editIcon}
+                alt="Edit"
+                width="20px"
               />
-              <span className="users_assigned">{formatNumberThousands(role.usersAssigned)}</span>
-            </div>
-            <p>Users Assigned</p>
-          </div>
-          <button
-            onClick={useAsTemplateHandler}
-            className="use__as transform transition-transform duration-300 hover:scale-110 "
-          >
-            <span>Use as Template</span>
-          </button>
-        </div>
-
-        {/* Delete Confirmation Modal */}
-        {showConfirmModal && (
-          <div className="modal-background">
-            <div className="modal-content">
-              <h4>Are you sure you want to delete this role?</h4>
-              <button
-                onClick={handleDeleteRole}
-                className={`delete__btn`}
-              >
-                <span>Yes, Delete</span>
-              </button>
-              <button
-                className="cancel__btn"
-                onClick={handleCancel}
-              >
-                <span>Cancel</span>
-              </button>
-            </div>
+            </button>
+            <button
+              onClick={() => setShowConfirmModal(true)} // Open confirmation modal
+              className="delete-icon transform transition-transform duration-300 hover:scale-110 "
+            >
+              <img
+                src={deleteIcon}
+                alt="Delete"
+                width="20px"
+              />
+            </button>
           </div>
         )}
-      </li>
-    );
+      </div>
+      <div className="role-category flex flex-col justify-center items-center">
+        <img
+          className="role__icon"
+          src={roleIconPath}
+          alt=""
+          width={`80px`}
+          height={`80px`}
+        />
+        <span className="admin__text">{role.name}</span>
+        <div className="users_wrapper">
+          <div className="flex flex-row justify-center items-center users_wrapper-inner">
+            <img
+              src={userAssignIcon}
+              alt=""
+              width={`20px`}
+            />
+            <span className="users_assigned">{formatNumberThousands(role.usersAssigned)}</span>
+          </div>
+          <p>Users Assigned</p>
+        </div>
+        <button
+          onClick={useAsTemplateHandler}
+          className="use__as transform transition-transform duration-300 hover:scale-110 "
+        >
+          <span>Use as Template</span>
+        </button>
+      </div>
+
+      {/* Delete Confirmation Modal */}
+      {showConfirmModal && (
+        <div className="modal-background">
+          <div className="modal-content">
+            <h4>Are you sure you want to delete this role?</h4>
+            <button
+              onClick={handleDeleteRole}
+              className={`delete__btn`}
+            >
+              <span>Yes, Delete</span>
+            </button>
+            <button
+              className="cancel__btn"
+              onClick={handleCancel}
+            >
+              <span>Cancel</span>
+            </button>
+          </div>
+        </div>
+      )}
+    </li>
+  );
 };
