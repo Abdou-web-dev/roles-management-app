@@ -19,7 +19,9 @@ const RoleForm: FunctionComponent<{
   setIsCreatingRole: React.Dispatch<React.SetStateAction<boolean>>;
   processRole: (newRole: Role) => void;
   existingRoles: Role[];
-}> = ({ setIsCreatingRole, processRole, roleToEdit, templateRole, existingRoles }) => {
+  setRoleToEdit: React.Dispatch<React.SetStateAction<Role | null>>;
+  setTemplateRole: React.Dispatch<React.SetStateAction<Role | null>>;
+}> = ({ setIsCreatingRole, processRole, roleToEdit, templateRole, existingRoles, setRoleToEdit, setTemplateRole }) => {
   const currentRole = roleToEdit ? roleToEdit : templateRole ? templateRole : null;
   const notify = (message: string, type: "success" | "error" | "info") => {
     type === "success" ? toast.success(message) : type === "info" ? toast.info(message) : toast.error(message);
@@ -128,7 +130,9 @@ const RoleForm: FunctionComponent<{
         <h2>Permissions</h2>
         <Permissions {...{ formLoading, onPermissionChange, roleFormik, currentRole }} />
 
-        <ControlButtons {...{ formLoading, roleFormik, setIsCreatingRole }} />
+        <ControlButtons
+          {...{ formLoading, roleFormik, setIsCreatingRole, setRoleToEdit, setTemplateRole, roleToEdit }}
+        />
       </form>
       {/* Spinner */}
       {formLoading && (

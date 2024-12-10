@@ -1,13 +1,26 @@
-import { FunctionComponent } from "react";
-import { RoleFormik } from "../interfaces/RoleInterface";
+import { FunctionComponent, useEffect } from "react";
+import { Role, RoleFormik } from "../interfaces/RoleInterface";
 
 interface ControlButtonsProps {
   roleFormik: RoleFormik;
   formLoading: boolean;
   setIsCreatingRole: React.Dispatch<React.SetStateAction<boolean>>;
+  setRoleToEdit: React.Dispatch<React.SetStateAction<Role | null>>;
+  setTemplateRole: React.Dispatch<React.SetStateAction<Role | null>>;
+  roleToEdit: Role | null | undefined;
 }
 
-const ControlButtons: FunctionComponent<ControlButtonsProps> = ({ roleFormik, setIsCreatingRole, formLoading }) => {
+const ControlButtons: FunctionComponent<ControlButtonsProps> = ({
+  roleFormik,
+  setIsCreatingRole,
+  formLoading,
+  setRoleToEdit,
+  setTemplateRole,
+  roleToEdit,
+}) => {
+  useEffect(() => {
+    console.log(roleToEdit, "roleToEdit is from ControlButtons ");
+  }, [roleToEdit]);
   return (
     <div className="role-control-buttons">
       <button
@@ -17,6 +30,8 @@ const ControlButtons: FunctionComponent<ControlButtonsProps> = ({ roleFormik, se
         onClick={() => {
           roleFormik.resetForm();
           setIsCreatingRole(false);
+          setRoleToEdit(null);
+          setTemplateRole(null);
         }}
       >
         <span>Cancel</span>

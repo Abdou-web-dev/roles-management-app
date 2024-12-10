@@ -120,7 +120,14 @@ const Team = () => {
             </div>
             <h3>Configure general information and permissions below. Don’t forget to save the Custom Role.</h3>
             <RoleForm
-              {...{ setIsCreatingRole, roleToEdit, templateRole, existingRoles: roles }}
+              {...{
+                setIsCreatingRole,
+                roleToEdit,
+                templateRole,
+                existingRoles: roles,
+                setRoleToEdit,
+                setTemplateRole,
+              }}
               processRole={handleProcessRole}
             />
           </div>
